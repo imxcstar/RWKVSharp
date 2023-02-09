@@ -4,3 +4,4 @@
 * **Hugging Face repo**: https://huggingface.co/rocca/rwkv-4-pile-web
 * https://github.com/BlinkDL/RWKV-LM
 * https://github.com/josephrocca/rwkv-v4-web
+* https://github.com/Alex1911-Jiang/GPT-3-Encoder-Sharp
