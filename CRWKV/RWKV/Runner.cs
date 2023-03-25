@@ -3,12 +3,12 @@ using Microsoft.ML.OnnxRuntime;
 using Seq2SeqSharp.Tools;
 using Seq2SeqSharp;
 
-namespace CRWKV
+namespace RWKV
 {
     public class Runner
     {
-        private TOKENIZER tokenizer;
-        private InferenceSession m;
+        private Tokenizer _tokenizer;
+        private InferenceSession _inferenceSession;
 
         private int _ctx_len = 0;
         private int _n_layer = 0;
@@ -26,16 +26,18 @@ namespace CRWKV
 
         public int Init()
         {
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Model");
-            tokenizer = new TOKENIZER(Path.Combine(path, "20B_tokenizer.json"));
+            TensorAllocator.InitDevices(ProcessorTypeEnums.CPU, new int[] { 0 });
 
-            m = new InferenceSession(Path.Combine(path, _model));
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Model");
+            _tokenizer = new Tokenizer(Path.Combine(path, "20B_tokenizer.json"));
+
+            _inferenceSession = new InferenceSession(Path.Combine(path, _model));
             return _ctx_len;
         }
 
-        public void Run(string code)
+        public void Run(string value, Action<string?> callBack)
         {
-            var ctx = tokenizer.Encoder.Encode(code);
+            var ctx = _tokenizer.Encoder.Encode(value);
 
             Tensor<float> xx_att = new DenseTensor<float>(new[] { _n_layer, _n_embd });
             Tensor<float> aa_att = new DenseTensor<float>(new[] { _n_layer, _n_embd });
@@ -61,7 +63,7 @@ namespace CRWKV
                     NamedOnnxValue.CreateFromTensor("pp_att", pp_att),
                     NamedOnnxValue.CreateFromTensor("xx_ffn", xx_ffn),
                 };
-                var ret = m.Run(inputs).ToArray();
+                var ret = _inferenceSession.Run(inputs).ToArray();
                 var f = ret[0].AsTensor<float>();
                 xx_att = ret[1].AsTensor<float>();
                 aa_att = ret[2].AsTensor<float>();
@@ -73,20 +75,17 @@ namespace CRWKV
                 if (xutput.Count == 0)
                 {
                     var ac = sl(f);
-                    //var ac = sample_logits(f);
 
                     input[_ctx_len - 1] = ac;
 
-                    var ch = tokenizer.Encoder.Decode(new[] { ac });
-                    Console.Write(ch);
+                    var ch = _tokenizer.Encoder.Decode(new[] { ac });
+                    callBack?.Invoke(ch);
                 }
             }
         }
 
         private int sl(Tensor<float> out1)
         {
-            TensorAllocator.InitDevices(ProcessorTypeEnums.CPU, new int[] { 0 });
-
             var graph = new ComputeGraphTensor(new WeightTensorFactory(), 0, false);
 
             var v = out1.AsEnumerable().ToArray();

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace CRWKV
+namespace RWKV
 {
     public class TokenizerInfo
     {
@@ -65,17 +65,17 @@ namespace CRWKV
         public bool normalized { get; set; }
     }
 
-    public class TOKENIZER
+    public class Tokenizer
     {
-        public Encoder Encoder { get; set; }
+        public BPEncoder Encoder { get; set; }
 
-        public TOKENIZER(string WORD_NAME)
+        public Tokenizer(string path)
         {
-            using var file = File.OpenRead(WORD_NAME);
+            using var file = File.OpenRead(path);
             var data = JsonSerializer.Deserialize<TokenizerInfo>(file);
             if (data == null)
                 throw new NotSupportedException();
-            Encoder = Encoder.Get_Encoder(data);
+            Encoder = new BPEncoder(data);
         }
     }
 }

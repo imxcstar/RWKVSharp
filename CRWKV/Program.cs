@@ -1,4 +1,4 @@
-﻿using CRWKV;
+﻿using RWKV;
 
 Console.Write("Input Model Name(rwkv-4-pile-169m-uint8.onnx): ");
 var modelName = Console.ReadLine();
@@ -32,6 +32,9 @@ while (true)
     var value = Console.ReadLine();
     if (string.IsNullOrEmpty(value))
         continue;
-    r.Run(value);
+    r.Run(value, v =>
+    {
+        Console.Write(v);
+    });
     Console.WriteLine();
 }

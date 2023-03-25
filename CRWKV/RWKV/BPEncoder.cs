@@ -6,9 +6,9 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace CRWKV
+namespace RWKV
 {
-    public class Encoder
+    public class BPEncoder
     {
         private Dictionary<string, int> _encoder;
         private Dictionary<int, string> _decoder;
@@ -18,12 +18,20 @@ namespace CRWKV
         private Dictionary<string, string> _cache;
         private Regex _pat;
 
-        private Encoder(Dictionary<string, int> encoder, (string, string)[] bpe_merges)
+        public BPEncoder(TokenizerInfo tokenizerInfo)
         {
-            _encoder = encoder;
+            _encoder = tokenizerInfo.model.vocab;
             _decoder = _encoder.ToDictionary(v => v.Value, k => k.Key);
+            var added_tokens = tokenizerInfo.added_tokens.ToDictionary(x => x.id, x => x.content);
+            var bpe_merges = tokenizerInfo.model.merges.Select(x => (x.Split(" ")[0], x.Split(" ")[1])).ToArray();
+            foreach (var token in added_tokens)
+            {
+                if (!_decoder.ContainsKey(token.Key))
+                    _decoder.Add(token.Key, token.Value);
+            }
             _byte_encoder = Bytes_To_Unicode();
             _byte_decoder = _byte_encoder.ToDictionary(v => v.Value, k => k.Key);
+            _byte_decoder.Add(' ', 32);
             _bpe_ranks = new Dictionary<(string, string), float>();
             for (int i = 0; i < bpe_merges.Length; i++)
                 _bpe_ranks[bpe_merges[i]] = i;
@@ -143,11 +151,6 @@ namespace CRWKV
         {
             string text = string.Join("", tokens.Select(token => _decoder[token]));
             return Encoding.UTF8.GetString(text.Select(c => _byte_decoder[c]).ToArray());
-        }
-
-        public static Encoder Get_Encoder(TokenizerInfo tokenizerInfo)
-        {
-            return new Encoder(tokenizerInfo.model.vocab, tokenizerInfo.model.merges.Select(x => (x.Split(" ")[0], x.Split(" ")[1])).ToArray());
         }
     }
 }
