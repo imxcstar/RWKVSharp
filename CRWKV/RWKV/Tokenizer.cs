@@ -67,15 +67,20 @@ namespace RWKV
 
     public class Tokenizer
     {
-        public BPEncoder Encoder { get; set; }
+        private TokenizerInfo _info;
 
         public Tokenizer(string path)
         {
             using var file = File.OpenRead(path);
-            var data = JsonSerializer.Deserialize<TokenizerInfo>(file);
-            if (data == null)
+            var info = JsonSerializer.Deserialize<TokenizerInfo>(file);
+            if (info == null)
                 throw new NotSupportedException();
-            Encoder = new BPEncoder(data);
+            _info = info;
+        }
+
+        public BPEncoder NewEncoder()
+        {
+            return new BPEncoder(_info);
         }
     }
 }

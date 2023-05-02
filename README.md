@@ -1,7 +1,15 @@
-### Reference Links
+## Support RWKV4 Raven 1B5-14B (CPU/GPU)
 
-* **ONNX conversion notebook**: https://colab.research.google.com/github/josephrocca/rwkv-v4-web/blob/main/RWKV_v4_ONNX_conversion.ipynb
-* **Hugging Face repo**: https://huggingface.co/rocca/rwkv-4-pile-web
+[Onnx Download](https://github.com/imxcstar/CSharp-RWKV-V4/releases)
+
+## Preview
+
+![1.png](/Preview/1.png)
+
+## Reference Links
+
+* **Hugging Face repo**: https://huggingface.co/BlinkDL/rwkv-4-raven
+* https://github.com/harrisonvanderbyl/rwkv-onnx
 * https://github.com/BlinkDL/RWKV-LM
-* https://github.com/josephrocca/rwkv-v4-web
+* https://github.com/BlinkDL/ChatRWKV
 * https://github.com/Alex1911-Jiang/GPT-3-Encoder-Sharp
