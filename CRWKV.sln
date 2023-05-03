@@ -3,27 +3,51 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRWKV", "CRWKV\CRWKV.csproj", "{D2C9B375-1A91-47C9-9953-5D9B7289AEBB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRWKV.ONNX", "CRWKV-ONNX\CRWKV.ONNX.csproj", "{D2C9B375-1A91-47C9-9953-5D9B7289AEBB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRWKV.GGML", "CRWKV-GGML\CRWKV.GGML.csproj", "{00C40717-2529-4369-A14E-B6C64FCE20F1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRWKV.Core", "CRWKV-Core\CRWKV.Core.csproj", "{24137E7C-145C-44DF-80AA-937F422A039E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRWKV.GGML.Test", "CRWKV.GGML.Test\CRWKV.GGML.Test.csproj", "{B32FD283-C22E-48E6-A7B9-6354B80338E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRWKV.ONNX.Test", "CRWKV.ONNX.Test\CRWKV.ONNX.Test.csproj", "{0A0E5BB1-80CF-442C-8C9C-392DD3A94176}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{EB6B49B9-B046-40C0-8814-4FE40DA5B410}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		Debug|x64 = Debug|x64
 		Release|Any CPU = Release|Any CPU
-		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D2C9B375-1A91-47C9-9953-5D9B7289AEBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D2C9B375-1A91-47C9-9953-5D9B7289AEBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D2C9B375-1A91-47C9-9953-5D9B7289AEBB}.Debug|x64.ActiveCfg = Debug|x64
-		{D2C9B375-1A91-47C9-9953-5D9B7289AEBB}.Debug|x64.Build.0 = Debug|x64
 		{D2C9B375-1A91-47C9-9953-5D9B7289AEBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2C9B375-1A91-47C9-9953-5D9B7289AEBB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D2C9B375-1A91-47C9-9953-5D9B7289AEBB}.Release|x64.ActiveCfg = Release|x64
-		{D2C9B375-1A91-47C9-9953-5D9B7289AEBB}.Release|x64.Build.0 = Release|x64
+		{00C40717-2529-4369-A14E-B6C64FCE20F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00C40717-2529-4369-A14E-B6C64FCE20F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00C40717-2529-4369-A14E-B6C64FCE20F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00C40717-2529-4369-A14E-B6C64FCE20F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24137E7C-145C-44DF-80AA-937F422A039E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24137E7C-145C-44DF-80AA-937F422A039E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24137E7C-145C-44DF-80AA-937F422A039E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24137E7C-145C-44DF-80AA-937F422A039E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B32FD283-C22E-48E6-A7B9-6354B80338E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B32FD283-C22E-48E6-A7B9-6354B80338E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B32FD283-C22E-48E6-A7B9-6354B80338E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B32FD283-C22E-48E6-A7B9-6354B80338E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A0E5BB1-80CF-442C-8C9C-392DD3A94176}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A0E5BB1-80CF-442C-8C9C-392DD3A94176}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A0E5BB1-80CF-442C-8C9C-392DD3A94176}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A0E5BB1-80CF-442C-8C9C-392DD3A94176}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B32FD283-C22E-48E6-A7B9-6354B80338E7} = {EB6B49B9-B046-40C0-8814-4FE40DA5B410}
+		{0A0E5BB1-80CF-442C-8C9C-392DD3A94176} = {EB6B49B9-B046-40C0-8814-4FE40DA5B410}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C5C40DEB-B901-423F-AA32-277C4B1F3BBA}

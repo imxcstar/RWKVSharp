@@ -13,6 +13,8 @@ Console.WriteLine($"Loading...");
 
 var rf = new RunnerFactory(modelName, n_layer, n_embd);
 rf.Init();
+rf.SetOnnxModel();
+
 var r = rf.NewRunner();
 
 while (true)

@@ -4,6 +4,8 @@ namespace RWKV
 {
     public class TokenizerInfo
     {
+        public TokenizerInfo() { }
+
         public string version { get; set; }
         public object truncation { get; set; }
         public object padding { get; set; }

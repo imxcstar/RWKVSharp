@@ -1,20 +1,19 @@
 ﻿using MathNet.Numerics.Distributions;
 using MathNet.Numerics.LinearAlgebra;
-using Seq2SeqSharp.Tools;
 
 namespace RWKV
 {
     public class Runner
     {
-        private readonly OnnxModel _onnxModel;
+        private readonly IRWKVModel _model;
         private readonly BPEncoder _encoder;
         private object _state;
 
-        public Runner(OnnxModel onnxModel, BPEncoder encoder)
+        public Runner(IRWKVModel model, BPEncoder encoder)
         {
-            _onnxModel = onnxModel;
+            _model = model;
             _encoder = encoder;
-            _state = _onnxModel.GetEmptyStates();
+            _state = _model.GetEmptyStates();
         }
 
         public void Run(string value, Action<string?> callBack)
@@ -29,12 +28,12 @@ namespace RWKV
                 {
                     input = xutput.Dequeue();
                 }
-                var logits_state = _onnxModel.Forward(input, _state);
+                var logits_state = _model.Forward(input, _state);
                 _state = logits_state.state;
 
                 if (xutput.Count == 0)
                 {
-                    var ac = TopPSample(logits_state.logits);
+                    var ac = NPSample(logits_state.logits);
                     input = ac;
                     strEnc.Add(ac);
                     var str = _encoder.Decode(strEnc);
@@ -47,22 +46,6 @@ namespace RWKV
                     }
                 }
             }
-        }
-
-        private int TopPSample(IEnumerable<float> ozut)
-        {
-            var graph = new ComputeGraphTensor(new WeightTensorFactory(), 0, false);
-
-            var v = ozut.ToArray();
-            var w = new WeightTensor(new long[2] { 1, v.Length }, 0, 0);
-            w.SetWeightArray(v);
-
-            var w2 = graph.Softmax(w);
-
-            var data = graph.TopPSampleIndice(w2, new List<List<int>> { new List<int>() });
-            var ret = data.ToWeightArray();
-
-            return (int)ret[0];
         }
 
         public int NPSample(IEnumerable<float> ozut, float temp = 1.0f, float top_p_usual = 0.8f)

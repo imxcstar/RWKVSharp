@@ -9,7 +9,7 @@ namespace RWKV
         FP32
     }
 
-    public class OnnxModel
+    public class OnnxModel : IRWKVModel, IDisposable
     {
         private InferenceSession _inferenceSession;
         private Type _type;
@@ -21,6 +21,11 @@ namespace RWKV
         private OnnxModelType _modelType;
 
         public OnnxModelType ModelType => _modelType;
+
+        public void Dispose()
+        {
+            _inferenceSession.Dispose();
+        }
 
         public OnnxModel(string model, int embed, int layers)
         {
