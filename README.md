@@ -4,15 +4,15 @@
 
 [GGML Download](https://huggingface.co/BlinkDL/rwkv-4-raven)
 
+## Model placement location
+
+![3.png](/Preview/3.png)
+
 ## Preview
 
 ![1.png](/Preview/1.png)
 
 ![2.png](/Preview/2.png)
-
-## Model placement location
-
-![3.png](/Preview/3.png)
 
 ## Reference Links
 
