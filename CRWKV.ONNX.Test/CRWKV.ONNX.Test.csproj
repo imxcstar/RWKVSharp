@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CRWKV-ONNX\CRWKV.ONNX.csproj" />
+    <ProjectReference Include="..\CRWKV.ONNX\CRWKV.ONNX.csproj" />
   </ItemGroup>
 
 </Project>

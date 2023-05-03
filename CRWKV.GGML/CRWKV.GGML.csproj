@@ -10,13 +10,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\CRWKV-Core\CRWKV.Core.csproj" />
+	  <ProjectReference Include="..\CRWKV.Core\CRWKV.Core.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="librwkv.dll">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
+	  <None Update="rwkv.dll">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

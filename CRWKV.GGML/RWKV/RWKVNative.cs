@@ -10,7 +10,7 @@ namespace RWKV
 {
     public static partial class RWKVNative
     {
-        private const string LIBRARY_NAME = "librwkv";
+        private const string LIBRARY_NAME = "rwkv";
 
         /// <summary>
         /// Loads the model from a file and prepares it for inference.

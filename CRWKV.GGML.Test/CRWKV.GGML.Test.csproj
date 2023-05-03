@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CRWKV-GGML\CRWKV.GGML.csproj" />
+    <ProjectReference Include="..\CRWKV.GGML\CRWKV.GGML.csproj" />
   </ItemGroup>
 
 </Project>
