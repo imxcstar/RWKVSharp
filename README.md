@@ -16,9 +16,9 @@
 
 ## Reference Links
 
-* **Hugging Face repo**: https://huggingface.co/BlinkDL/rwkv-4-raven
-* https://github.com/harrisonvanderbyl/rwkv-onnx
-* https://github.com/saharNooby/rwkv.cpp
-* https://github.com/BlinkDL/RWKV-LM
-* https://github.com/BlinkDL/ChatRWKV
-* https://github.com/Alex1911-Jiang/GPT-3-Encoder-Sharp
+* **RWKV Hugging Face repo**: https://huggingface.co/BlinkDL/rwkv-4-raven
+* **Onnx**: https://github.com/harrisonvanderbyl/rwkv-onnx
+* **GGML**: https://github.com/saharNooby/rwkv.cpp
+* **RWKV**: https://github.com/BlinkDL/RWKV-LM
+* **ChatRWKV**: https://github.com/BlinkDL/ChatRWKV
+* **Tokenizer**: https://github.com/Alex1911-Jiang/GPT-3-Encoder-Sharp
