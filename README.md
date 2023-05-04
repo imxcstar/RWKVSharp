@@ -2,7 +2,7 @@
 
 [Onnx Download](https://github.com/imxcstar/CSharp-RWKV-V4/releases)
 
-[GGML Download](https://huggingface.co/imxcstar/rwkv-4-raven-ggml/tree/main) | [Download2](https://huggingface.co/BlinkDL/rwkv-4-raven)
+[GGML Download](https://huggingface.co/imxcstar/rwkv-4-raven-ggml/tree/main) | [Download2](https://huggingface.co/BlinkDL/rwkv-4-raven/tree/main)
 
 ## Model placement location
 
