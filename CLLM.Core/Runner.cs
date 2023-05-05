@@ -1,54 +1,58 @@
-﻿using MathNet.Numerics.Distributions;
+﻿using CLLM.Core.Interfaces;
+using MathNet.Numerics.Distributions;
 using MathNet.Numerics.LinearAlgebra;
+using System.Collections.Generic;
 
-namespace RWKV
+namespace CLLM.Core
 {
-    public class Runner
+    public class Runner : RunnerBase
     {
-        private readonly IRWKVModel _model;
-        private readonly BPEncoder _encoder;
+        private BPEncoder _encoder;
         private object _state;
 
-        public Runner(IRWKVModel model, BPEncoder encoder)
+        public override void Init(string name, IModel model, IRunnerOptions options)
         {
-            _model = model;
-            _encoder = encoder;
-            _state = _model.GetEmptyStates();
+            base.Init(name, model, options);
+            _state = model.GetEmptyStates();
+            if (options.Tokenizer is Tokenizer tokenizer)
+                _encoder = tokenizer.NewEncoder();
+            else
+                throw new NotSupportedException("not support custom tokenizer by defult runner.");
         }
 
-        public void Run(string value, Action<string?> callBack)
+        public override async IAsyncEnumerable<string> RunAsync(string value, object? rawValue = null)
         {
             var xutput = new Queue<int>(_encoder.Encode(value));
             var size = xutput.Count;
             var input = 0;
             var strEnc = new List<int>();
-            for (int i = 0; i < size + 1024; i++)
+            for (int i = 0; i < size + Options.MaxTokens; i++)
             {
                 if (xutput.Count > 0)
                 {
                     input = xutput.Dequeue();
                 }
-                var logits_state = _model.Forward(input, _state);
+                var logits_state = await Task.FromResult(Model.Forward(input, _state));
                 _state = logits_state.state;
 
                 if (xutput.Count == 0)
                 {
-                    var ac = NPSample(logits_state.logits);
+                    var ac = await Task.FromResult(NPSample(logits_state.logits));
+                    if (ac == 0)
+                        break;
                     input = ac;
                     strEnc.Add(ac);
                     var str = _encoder.Decode(strEnc);
-                    if (str == "<|endoftext|>")
-                        break;
                     if (!str.Contains("\ufffd"))
                     {
-                        callBack?.Invoke(str);
+                        yield return str;
                         strEnc.Clear();
                     }
                 }
             }
         }
 
-        public int NPSample(IEnumerable<float> ozut, float temp = 1.0f, float top_p_usual = 0.8f)
+        private int NPSample(IEnumerable<float> ozut, float temp = 1.0f, float top_p_usual = 0.8f)
         {
             // 使用MathNet.Numerics库创建一个向量。
             var vector = Vector<float>.Build.DenseOfEnumerable(ozut);

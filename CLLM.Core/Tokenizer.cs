@@ -1,6 +1,7 @@
-﻿using System.Text.Json;
+﻿using CLLM.Core.Interfaces;
+using System.Text.Json;
 
-namespace RWKV
+namespace CLLM.Core
 {
     public class TokenizerInfo
     {
@@ -67,7 +68,7 @@ namespace RWKV
         public bool normalized { get; set; }
     }
 
-    public class Tokenizer
+    public class Tokenizer : ITokenizer
     {
         private TokenizerInfo _info;
 

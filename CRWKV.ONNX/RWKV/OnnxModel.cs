@@ -1,4 +1,5 @@
-﻿using Microsoft.ML.OnnxRuntime;
+﻿using CLLM.Core.Interfaces;
+using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
 
 namespace RWKV
@@ -9,7 +10,7 @@ namespace RWKV
         FP32
     }
 
-    public class OnnxModel : IRWKVModel, IDisposable
+    public class OnnxModel : IModel, IDisposable
     {
         private InferenceSession _inferenceSession;
         private Type _type;

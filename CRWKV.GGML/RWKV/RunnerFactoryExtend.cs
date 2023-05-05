@@ -1,10 +1,24 @@
-﻿namespace RWKV
+﻿using CLLM.Core;
+
+namespace RWKV
 {
     public static class RunnerFactoryExtend
     {
-        public static void SetGGMLModel(this RunnerFactory runnerFactory)
+        public static void RegisterRWKVGGMLModel(this RunnerFactory runnerFactory, string modelPath, string tokenizerPath)
         {
-            runnerFactory.Model = new GGMLModel(Path.Combine(runnerFactory.ModelPath, runnerFactory.ModelFile));
+            runnerFactory.RegisterRWKVGGMLModel("Default", modelPath, tokenizerPath);
+        }
+
+        public static void RegisterRWKVGGMLModel(this RunnerFactory runnerFactory, string name, string modelPath, string tokenizerPath)
+        {
+            runnerFactory.RegisterRunner<Runner>(
+                name,
+                new GGMLModel(modelPath),
+                new RunnerOptions()
+                {
+                    Tokenizer = new Tokenizer(tokenizerPath)
+                }
+            );
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using RWKV;
+﻿using CLLM.Core;
+using RWKV;
 
 Console.Write("Input Model Name(rwkv-169m-ggml-f16.bin): ");
 var modelName = Console.ReadLine();
@@ -7,11 +8,11 @@ if (string.IsNullOrEmpty(modelName))
 
 Console.WriteLine($"Loading...");
 
-var rf = new RunnerFactory(modelName);
-rf.Init();
-rf.SetGGMLModel();
+var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Model");
+var rf = new RunnerFactory();
+rf.RegisterRWKVGGMLModel(Path.Combine(path, modelName), Path.Combine(path, "20B_tokenizer.json"));
 
-var r = rf.NewRunner();
+var r = rf.Builder();
 
 while (true)
 {
@@ -19,6 +20,6 @@ while (true)
     var value = Console.ReadLine();
     if (string.IsNullOrEmpty(value))
         continue;
-    r.Run(value, Console.Write);
+    r.Run(value.Replace("\\r\\n", "\r\n").Replace("\\r", "\r").Replace("\\n", "\n"), Console.Write);
     Console.WriteLine();
 }

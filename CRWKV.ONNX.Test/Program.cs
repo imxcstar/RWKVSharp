@@ -1,4 +1,5 @@
-﻿using RWKV;
+﻿using CLLM.Core;
+using RWKV;
 
 Console.Write("Input Model Name(RWKV_32_2560_16.onnx): ");
 var modelName = Console.ReadLine();
@@ -11,11 +12,11 @@ var n_embd = int.Parse(modelNames[2]);
 
 Console.WriteLine($"Loading...");
 
-var rf = new RunnerFactory(modelName, n_layer, n_embd);
-rf.Init();
-rf.SetOnnxModel();
+var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Model");
+var rf = new RunnerFactory();
+rf.RegisterRWKVOnnxModel(Path.Combine(path, modelName), Path.Combine(path, "20B_tokenizer.json"), n_embd, n_layer);
 
-var r = rf.NewRunner();
+var r = rf.Builder();
 
 while (true)
 {
@@ -23,7 +24,7 @@ while (true)
     var value = Console.ReadLine();
     if (string.IsNullOrEmpty(value))
         continue;
-    r.Run(value, v =>
+    r.Run(value.Replace("\\r\\n", "\r\n").Replace("\\r", "\r").Replace("\\n", "\n"), v =>
     {
         Console.Write(v);
     });

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace RWKV
 {
+#if NET7_0_OR_GREATER
     public static partial class RWKVNative
     {
         private const string LIBRARY_NAME = "rwkv";
@@ -87,4 +88,78 @@ namespace RWKV
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         public static partial string GetSystemInfoString();
     }
+#else
+    public static class RWKVNative
+    {
+        private const string LIBRARY_NAME = "rwkv";
+
+        /// <summary>
+        /// Loads the model from a file and prepares it for inference.
+        /// </summary>
+        /// <param name="modelFilePath">path to model file in ggml format.</param>
+        /// <param name="nThreads">count of threads to use, must be positive.</param>
+        /// <returns>Returns NULL on any error. Error messages would be printed to stderr.</returns>
+        [DllImport(LIBRARY_NAME, EntryPoint = "rwkv_init_from_file", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr InitFromFile([MarshalAs(UnmanagedType.LPStr)] string modelFilePath, uint nThreads);
+
+        /// <summary>
+        /// Evaluates the model for a single token.
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="token">next token index, in range 0 <= token < n_vocab.</param>
+        /// <param name="stateIn">FP32 buffer of size rwkv_get_state_buffer_element_count; or NULL, if this is a first pass.</param>
+        /// <param name="stateOut">FP32 buffer of size rwkv_get_state_buffer_element_count. This buffer will be written to.</param>
+        /// <param name="logitsOut">FP32 buffer of size rwkv_get_logits_buffer_element_count. This buffer will be written to.</param>
+        /// <returns>Returns false on any error. Error messages would be printed to stderr.</returns>
+        [DllImport(LIBRARY_NAME, EntryPoint = "rwkv_eval", CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool Eval(IntPtr ctx, int token, IntPtr stateIn, IntPtr stateOut, IntPtr logitsOut);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <returns>Returns count of FP32 elements in state buffer.</returns>
+        [DllImport(LIBRARY_NAME, EntryPoint = "rwkv_get_state_buffer_element_count", CallingConvention = CallingConvention.Cdecl)]
+        public static extern uint GetStateBufferElementCount(IntPtr ctx);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <returns>Returns count of FP32 elements in logits buffer.</returns>
+        [DllImport(LIBRARY_NAME, EntryPoint = "rwkv_get_logits_buffer_element_count", CallingConvention = CallingConvention.Cdecl)]
+        public static extern uint GetLogitsBufferElementCount(IntPtr ctx);
+
+        /// <summary>
+        /// Frees all allocated memory and the context.
+        /// </summary>
+        /// <param name="ctx"></param>
+        [DllImport(LIBRARY_NAME, EntryPoint = "rwkv_free", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void Free(IntPtr ctx);
+
+        /// <summary>
+        /// Quantizes FP32 or FP16 model to one of quantized formats.
+        /// Available format names:
+        /// - Q4_0
+        /// - Q4_1
+        /// - Q4_2
+        /// - Q5_0
+        /// - Q5_1
+        /// - Q8_0
+        /// </summary>
+        /// <param name="modelFilePathIn">path to model file in ggml format, must be either FP32 or FP16.</param>
+        /// <param name="modelFilePathOut">quantized model will be written here.</param>
+        /// <param name="formatName">must be one of available format names below.</param>
+        /// <returns>Returns false on any error. Error messages would be printed to stderr.</returns>
+        [DllImport(LIBRARY_NAME, EntryPoint = "rwkv_quantize_model_file", CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool QuantizeModelFile([MarshalAs(UnmanagedType.LPStr)] string modelFilePathIn, [MarshalAs(UnmanagedType.LPStr)] string modelFilePathOut, [MarshalAs(UnmanagedType.LPStr)] string formatName);
+
+        /// <summary>
+        /// </summary>
+        /// <returns>Returns system information string.</returns>
+        [DllImport(LIBRARY_NAME, EntryPoint = "rwkv_get_system_info_string", CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        public static extern string GetSystemInfoString();
+    }
+#endif
 }

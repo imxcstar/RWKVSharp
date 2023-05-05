@@ -6,7 +6,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace RWKV
+namespace CLLM.Core
 {
     public class BPEncoder
     {

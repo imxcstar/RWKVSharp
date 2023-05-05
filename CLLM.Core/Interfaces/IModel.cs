@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RWKV
+namespace CLLM.Core.Interfaces
 {
-    public interface IRWKVModel
+    public interface IModel
     {
         public object GetEmptyStates();
 
