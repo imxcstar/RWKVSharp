@@ -1,8 +1,10 @@
 ## Support RWKV4 Raven 1B5-14B (onnx/ggml) (CPU/GPU)
 
-[Onnx Download](https://github.com/imxcstar/CSharp-RWKV-V4/releases)
+[Demo Download](https://github.com/imxcstar/CSharp-RWKV-V4/releases)
 
-[GGML Download](https://huggingface.co/imxcstar/rwkv-4-raven-ggml/tree/main) | [Download2](https://huggingface.co/BlinkDL/rwkv-4-raven/tree/main)
+[Onnx Model Download](https://huggingface.co/imxcstar/rwkv-4-raven-onnx/tree/main)
+
+[GGML Model Download](https://huggingface.co/imxcstar/rwkv-4-raven-ggml/tree/main) | [Download2](https://huggingface.co/BlinkDL/rwkv-4-raven/tree/main)
 
 ## Model placement location
 
