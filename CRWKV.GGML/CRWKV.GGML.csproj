@@ -7,26 +7,33 @@
 		<Nullable>enable</Nullable>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<Platforms>AnyCPU</Platforms>
-		
+
 		<AssemblyName>CRWKV.GGML</AssemblyName>
 		<RootNamespace>CRWKV.GGML</RootNamespace>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Authors>xcssa</Authors>
 		<Company>SSA</Company>
-		<Description>rwkv.cpp ggml wrapper for rwkv llm model (cpu)</Description>
+		<Description>
+			rwkv.cpp ggml wrapper for rwkv llm model (cpu)
+			(Only supports Windows, please download other systems“ https://github.com/saharNooby/rwkv.cpp Compile as rwkv.so)
+		</Description>
 		<PackageProjectUrl>https://github.com/imxcstar/CSharp-RWKV-V4</PackageProjectUrl>
 		<PackageId>$(AssemblyName)</PackageId>
 		<VersionSuffix>V0.0.1</VersionSuffix>
 	</PropertyGroup>
-
+	
 	<ItemGroup>
-	  <ProjectReference Include="..\CLLM.Core\CLLM.Core.csproj" />
+		<None Include="rwkv.dll" Pack="true" PackagePath="runtimes"/>
+	</ItemGroup>
+	
+	<ItemGroup>
+		<ProjectReference Include="..\CLLM.Core\CLLM.Core.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="rwkv.dll">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
+		<None Update="rwkv.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 </Project>
