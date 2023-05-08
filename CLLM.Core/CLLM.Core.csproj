@@ -6,6 +6,16 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<Platforms>AnyCPU</Platforms>
+
+		<AssemblyName>CLLM.Core</AssemblyName>
+		<RootNamespace>CLLM.Core</RootNamespace>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Authors>xcssa</Authors>
+		<Company>SSA</Company>
+		<Description>Implementation of a Custom LLM Model Abstract Factory Pattern</Description>
+		<PackageProjectUrl>https://github.com/imxcstar/CSharp-RWKV-V4</PackageProjectUrl>
+		<PackageId>$(AssemblyName)</PackageId>
+		<VersionSuffix>V0.0.1</VersionSuffix>
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -7,6 +7,16 @@
 		<Nullable>enable</Nullable>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<Platforms>AnyCPU</Platforms>
+		
+		<AssemblyName>CRWKV.GGML</AssemblyName>
+		<RootNamespace>CRWKV.GGML</RootNamespace>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Authors>xcssa</Authors>
+		<Company>SSA</Company>
+		<Description>rwkv.cpp ggml wrapper for rwkv llm model (cpu)</Description>
+		<PackageProjectUrl>https://github.com/imxcstar/CSharp-RWKV-V4</PackageProjectUrl>
+		<PackageId>$(AssemblyName)</PackageId>
+		<VersionSuffix>V0.0.1</VersionSuffix>
 	</PropertyGroup>
 
 	<ItemGroup>

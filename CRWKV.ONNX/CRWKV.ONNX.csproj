@@ -6,6 +6,16 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<Platforms>AnyCPU</Platforms>
+		
+		<AssemblyName>CRWKV.ONNX</AssemblyName>
+		<RootNamespace>CRWKV.ONNX</RootNamespace>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Authors>xcssa</Authors>
+		<Company>SSA</Company>
+		<Description>rwkv.cpp onnx wrapper for rwkv llm model (cpu/gpu)</Description>
+		<PackageProjectUrl>https://github.com/imxcstar/CSharp-RWKV-V4</PackageProjectUrl>
+		<PackageId>$(AssemblyName)</PackageId>
+		<VersionSuffix>V0.0.1</VersionSuffix>
 	</PropertyGroup>
 
 	<ItemGroup>
