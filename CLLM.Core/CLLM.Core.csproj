@@ -15,7 +15,7 @@
 		<Description>Implementation of a Custom LLM Model Abstract Factory Pattern</Description>
 		<PackageProjectUrl>https://github.com/imxcstar/CSharp-RWKV-V4</PackageProjectUrl>
 		<PackageId>$(AssemblyName)</PackageId>
-		<VersionSuffix>V0.0.1</VersionSuffix>
+		<Version>0.0.1</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
