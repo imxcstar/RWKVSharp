@@ -1,7 +1,6 @@
-﻿using CLLM.Core.Interfaces;
-using System.Text.Json;
+﻿using System.Text.Json;
 
-namespace CLLM.Core
+namespace CLLM.Core.Tokenizer
 {
     public class TokenizerInfo
     {
@@ -68,22 +67,35 @@ namespace CLLM.Core
         public bool normalized { get; set; }
     }
 
-    public class Tokenizer : ITokenizer
+    public class BPETokenizer : ITokenizer
     {
         private TokenizerInfo _info;
+        private BPEncoder bpeEncoder;
 
-        public Tokenizer(string path)
+        public BPETokenizer(string path)
         {
             using var file = File.OpenRead(path);
             var info = JsonSerializer.Deserialize<TokenizerInfo>(file);
             if (info == null)
                 throw new NotSupportedException();
             _info = info;
+            bpeEncoder = new BPEncoder(_info);
         }
 
-        public BPEncoder NewEncoder()
+        public BPETokenizer(TokenizerInfo info)
         {
-            return new BPEncoder(_info);
+            _info = info;
+            bpeEncoder = new BPEncoder(_info);
+        }
+
+        public string Decode(IEnumerable<int> tokens)
+        {
+            return bpeEncoder.Decode(tokens);
+        }
+
+        public List<int> Encode(string text)
+        {
+            return bpeEncoder.Encode(text);
         }
     }
 }

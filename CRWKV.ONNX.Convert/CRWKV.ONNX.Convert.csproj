@@ -1,23 +1,28 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<TrimMode>partial</TrimMode>
-		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\CRWKV.ONNX\CRWKV.ONNX.csproj" />
+		<PackageReference Include="Python.Included" Version="3.11.4" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="Model\20B_tokenizer.json">
+	  <Folder Include="Python\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Python\convert.py">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="Model\rwkv_vocab_v20230424.txt">
+	  <None Update="Python\opslist.py">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Python\RWKVConverter.py">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>

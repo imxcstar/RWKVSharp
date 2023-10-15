@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CLLM.Core.Sampler;
+using CLLM.Core.Tokenizer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +10,8 @@ namespace CLLM.Core.Interfaces
 {
     public interface IRunnerOptions
     {
-        public ITokenizer? Tokenizer { get; set; }
+        public Func<ITokenizer> Tokenizer { get; set; }
+        public Func<ISampler> Sampler { get; set; }
         public int MaxTokens { get; set; }
     }
 }

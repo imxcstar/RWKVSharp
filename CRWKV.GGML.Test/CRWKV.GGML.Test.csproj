@@ -13,4 +13,13 @@
 		<ProjectReference Include="..\CRWKV.GGML\CRWKV.GGML.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="Model\20B_tokenizer.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Model\rwkv_vocab_v20230424.txt">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>

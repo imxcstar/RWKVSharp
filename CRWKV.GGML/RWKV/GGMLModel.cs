@@ -19,14 +19,14 @@ namespace RWKV
         public GGMLModel(string model)
         {
             _modelPath = model;
-            _model = RWKVNative.InitFromFile(model, (uint)(Math.Max(1, Environment.ProcessorCount - 4)));
-            _stateCount = (int)RWKVNative.GetStateBufferElementCount(_model);
-            _logitsCount = (int)RWKVNative.GetLogitsBufferElementCount(_model);
+            _model = RwkvCppNative.rwkv_init_from_file(model, (uint)(Math.Max(1, Environment.ProcessorCount - 4)));
+            _stateCount = (int)RwkvCppNative.rwkv_get_state_len(_model);
+            _logitsCount = (int)RwkvCppNative.rwkv_get_logits_len(_model);
         }
 
         public void Dispose()
         {
-            RWKVNative.Free(_model);
+            RwkvCppNative.rwkv_free(_model);
         }
 
         public object GetEmptyStates()
@@ -50,7 +50,7 @@ namespace RWKV
             else
                 throw new NotSupportedException($"not support state type \"{state.GetType()}\"");
 
-            if (!RWKVNative.Eval(_model, token, inStateBuffer, outStateBuffer, outLogitsBuffer))
+            if (!RwkvCppNative.rwkv_eval(_model, (uint)token, inStateBuffer, outStateBuffer, outLogitsBuffer))
                 throw new Exception();
 
             var outLogits = IntPtrToFloatArray(outLogitsBuffer, _logitsCount);

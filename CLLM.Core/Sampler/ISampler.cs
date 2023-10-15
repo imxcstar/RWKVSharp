@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CLLM.Core.Interfaces
+namespace CLLM.Core.Sampler
 {
-    public interface ITokenizer
+    public interface ISampler
     {
+        public int Sample(IEnumerable<float> logits);
     }
 }

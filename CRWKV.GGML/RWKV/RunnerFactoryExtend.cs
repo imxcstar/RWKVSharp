@@ -1,4 +1,7 @@
 ﻿using CLLM.Core;
+using CLLM.Core.Sampler;
+using CLLM.Core.Tokenizer;
+using CLLM.Core.Tokenizer.RWKV;
 
 namespace RWKV
 {
@@ -16,7 +19,19 @@ namespace RWKV
                 new GGMLModel(modelPath),
                 new RunnerOptions()
                 {
-                    Tokenizer = new Tokenizer(tokenizerPath)
+                    Tokenizer = () =>
+                    {
+                        var name = Path.GetFileNameWithoutExtension(tokenizerPath);
+                        return name switch
+                        {
+                            "rwkv_vocab_v20230424" => new TrieTokenizer(tokenizerPath),
+                            _ => new BPETokenizer(tokenizerPath)
+                        };
+                    },
+                    Sampler = () =>
+                    {
+                        return new NPSampler();
+                    }
                 }
             );
         }

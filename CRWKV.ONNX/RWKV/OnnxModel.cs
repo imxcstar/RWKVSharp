@@ -64,11 +64,11 @@ namespace RWKV
                         var state = new List<Tensor<Float16>>();
                         for (int i = 0; i < _layers; i++)
                         {
-                            state.Add(GDenseTensor<Float16>(0));
-                            state.Add(GDenseTensor<Float16>(0));
-                            state.Add(GDenseTensor<Float16>(0));
-                            state.Add(GDenseTensor<Float16>(0));
-                            state.Add(GDenseTensor<Float16>(64512));
+                            state.Add(GDenseTensor(new Float16(0)));
+                            state.Add(GDenseTensor(new Float16(0)));
+                            state.Add(GDenseTensor(new Float16(0)));
+                            state.Add(GDenseTensor(new Float16(0)));
+                            state.Add(GDenseTensor(Float16.NegativeInfinity));
                         }
                         return state;
                     }
@@ -81,7 +81,7 @@ namespace RWKV
                             state.Add(GDenseTensor<float>(0));
                             state.Add(GDenseTensor<float>(0));
                             state.Add(GDenseTensor<float>(0));
-                            state.Add(GDenseTensor<float>(float.NegativeInfinity));
+                            state.Add(GDenseTensor(float.NegativeInfinity));
                         }
                         return state;
                     };
@@ -97,7 +97,7 @@ namespace RWKV
                 case OnnxModelType.FP16:
                     {
                         var ret = Forward_FP16(xi, (List<Tensor<Float16>>)state);
-                        return (ret.logits.Select(x => HalfToSinglePrecision(x)).AsEnumerable(), ret.state);
+                        return (ret.logits.Select(x => x.ToFloat()).AsEnumerable(), ret.state);
                     }
                 case OnnxModelType.FP32:
                     {
@@ -133,22 +133,6 @@ namespace RWKV
             }
             var data = _inferenceSession.Run(_inputs);
             return (data.First().AsTensor<float>(), data.Skip(1).Select(x => x.AsTensor<float>()).ToList());
-        }
-
-        private float HalfToSinglePrecision(ushort half)
-        {
-            uint sign = (uint)(half >> 15);
-            uint exponent = (uint)((half & 0x7C00) >> 10);
-            uint mantissa = (uint)(half & 0x03FF);
-
-            uint singleSign = sign << 31;
-            uint singleExponent = (exponent + 127 - 15) << 23;
-            uint singleMantissa = mantissa << (23 - 10);
-
-            uint singleFloatBits = singleSign | singleExponent | singleMantissa;
-            float result = BitConverter.ToSingle(BitConverter.GetBytes(singleFloatBits), 0);
-
-            return result;
         }
 
         private DenseTensor<T> GDenseTensor<T>(T value)

@@ -6,7 +6,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace CLLM.Core
+namespace CLLM.Core.Tokenizer
 {
     public class BPEncoder
     {
