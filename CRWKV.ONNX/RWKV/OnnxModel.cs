@@ -32,7 +32,13 @@ namespace RWKV
         {
             var options = new SessionOptions();
             options.AppendExecutionProvider_CPU();
-            options.AppendExecutionProvider_CUDA();
+            try
+            {
+                options.AppendExecutionProvider_CUDA();
+            }
+            catch (Exception)
+            {
+            }
             _inferenceSession = new InferenceSession(model, options);
             _type = _inferenceSession.InputMetadata["instate0"].ElementType;
             _embed = embed;

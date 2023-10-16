@@ -1,8 +1,6 @@
 ﻿using CLLM.Core.Interfaces;
 using CLLM.Core.Sampler;
 using CLLM.Core.Tokenizer;
-using MathNet.Numerics.Distributions;
-using MathNet.Numerics.LinearAlgebra;
 using System.Collections.Generic;
 
 namespace CLLM.Core

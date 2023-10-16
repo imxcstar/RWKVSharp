@@ -31,7 +31,7 @@ namespace RWKV
                     },
                     Sampler = () =>
                     {
-                        return new NPSampler();
+                        return new RwkvSampler();
                     }
                 }
             );
