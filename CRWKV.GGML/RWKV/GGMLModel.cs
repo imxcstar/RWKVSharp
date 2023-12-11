@@ -77,5 +77,22 @@ namespace RWKV
             Marshal.Copy(floatArray, 0, floatPtr, size);
             return floatPtr;
         }
+
+        public object GetStates(int[] tokens)
+        {
+            var outLogitsBuffer = Marshal.AllocHGlobal(_logitsCount * sizeof(float));
+            var outStateBuffer = Marshal.AllocHGlobal(_stateCount * sizeof(float));
+
+            if (!RwkvCppNative.rwkv_eval_sequence_in_chunks(_model, tokens.Select(x => (uint)x).ToArray(), (ulong)tokens.Count(), 3072, IntPtr.Zero, outStateBuffer, outLogitsBuffer))
+                throw new Exception();
+
+            var outLogits = IntPtrToFloatArray(outLogitsBuffer, _logitsCount);
+            var outState = IntPtrToFloatArray(outStateBuffer, _stateCount);
+
+            Marshal.FreeHGlobal(outStateBuffer);
+            Marshal.FreeHGlobal(outLogitsBuffer);
+
+            return outState;
+        }
     }
 }

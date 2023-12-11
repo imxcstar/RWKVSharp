@@ -24,6 +24,8 @@ namespace CLLM.Core
             Options = options;
         }
 
+        public abstract void InitInstruction(string instruction);
+
         public virtual void Run(string value, Action<string> callBack, object? rawValue = null)
         {
             var task = Task.Run(async () =>

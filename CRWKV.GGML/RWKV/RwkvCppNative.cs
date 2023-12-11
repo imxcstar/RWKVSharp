@@ -10,7 +10,7 @@ namespace RWKV
 {
     public static partial class RwkvCppNative
     {
-        private const string LIBRARY_NAME = "rwkv";
+        private const string LIBRARY_NAME = "librwkv";
 
         /// <summary>
         /// Represents an error encountered during a function call.

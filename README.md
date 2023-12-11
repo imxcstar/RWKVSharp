@@ -1,4 +1,4 @@
-## Support RWKV4 Raven/World 1B5-14B (onnx/ggml) (CPU/GPU)
+## Support RWKV4 Raven/World RWKV5 1B5-14B (onnx/ggml) (CPU/GPU)
 
 [Demo Download](https://github.com/imxcstar/CSharp-RWKV-V4/releases)
 

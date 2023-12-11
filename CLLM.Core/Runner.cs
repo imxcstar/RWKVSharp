@@ -19,6 +19,12 @@ namespace CLLM.Core
             _sampler = options.Sampler.Invoke();
         }
 
+        public override void InitInstruction(string instruction)
+        {
+            var tokens = _tokenizer.Encode(instruction);
+            _state = Model.GetStates(tokens.ToArray());
+        }
+
         public override async IAsyncEnumerable<string> RunAsync(string value, object? rawValue = null)
         {
             var xutput = new Queue<int>(_tokenizer.Encode(value));

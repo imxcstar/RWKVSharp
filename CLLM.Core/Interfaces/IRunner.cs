@@ -14,6 +14,7 @@ namespace CLLM.Core.Interfaces
 
         public void Init(string name, IModel? model, IRunnerOptions? options);
 
+        public void InitInstruction(string instruction);
         public void Run(string value, Action<string> callBack, object? rawValue = null);
         public string Run(string value, object? rawValue = null);
         public IAsyncEnumerable<string> RunAsync(string value, object? rawValue = null);

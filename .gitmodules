@@ -1,0 +1,3 @@
+[submodule "libs/rwkv.cpp"]
+	path = libs/rwkv.cpp
+	url = https://github.com/saharNooby/rwkv.cpp.git

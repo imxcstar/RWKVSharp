@@ -150,5 +150,10 @@ namespace RWKV
             }
             return tvalue;
         }
+
+        public object GetStates(int[] tokens)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

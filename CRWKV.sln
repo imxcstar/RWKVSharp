@@ -21,7 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tool", "Tool", "{F65D5B29-B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRWKV.GGML.Convert", "CRWKV.GGML.Convert\CRWKV.GGML.Convert.csproj", "{50127148-DEE3-48F8-815C-47615EEBDF8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRWKV.ONNX.Convert", "CRWKV.ONNX.Convert\CRWKV.ONNX.Convert.csproj", "{1E2462EE-8EAF-402C-A8E2-DF3A1B5E5E30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRWKV.ONNX.Convert", "CRWKV.ONNX.Convert\CRWKV.ONNX.Convert.csproj", "{1E2462EE-8EAF-402C-A8E2-DF3A1B5E5E30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

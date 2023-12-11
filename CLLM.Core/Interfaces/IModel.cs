@@ -10,6 +10,8 @@ namespace CLLM.Core.Interfaces
     {
         public object GetEmptyStates();
 
+        public object GetStates(int[] tokens);
+
         public (IEnumerable<float> logits, object state) Forward(int token, object state);
     }
 }

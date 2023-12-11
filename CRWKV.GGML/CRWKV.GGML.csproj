@@ -23,17 +23,14 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
-		<None Include="rwkv.dll" Pack="true" PackagePath="runtimes"/>
-	</ItemGroup>
-	
-	<ItemGroup>
 		<ProjectReference Include="..\CLLM.Core\CLLM.Core.csproj" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<None Update="rwkv.dll">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
-
+	
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+		<ItemGroup Condition="'$(Configuration)'=='Debug'">
+			<None Include="..\libs\rwkv.cpp\out\build\x64-Debug\bin\rwkv.dll">
+				<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			</None>
+		</ItemGroup>
+	</Target>
 </Project>
