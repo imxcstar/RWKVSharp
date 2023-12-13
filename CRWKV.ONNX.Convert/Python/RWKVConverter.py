@@ -12,8 +12,9 @@ class RWKVConverter:
     def convert_model(path, dtype,savePath,name):
         w = torch.load(path, map_location="cpu")
         dims = len(w["blocks.0.att.key.weight"])
+        headsnume, headsize = w[f"blocks.0.att.time_decay"].shape
         layers = len(list(filter(lambda x: "blocks" in x and "ln1.bias" in x, w.keys())))
-        ops = opslist.RWKVOnnxOps(layers,dims,dtype=dtype, opsVersion=17 if 'world' in name.lower() else 15, useSafeWKV=True, externalData=True, splitExternalData=False, fp32inout=True,savePath=savePath,cname=name)
+        ops = opslist.RWKVOnnxOps(layers,dims,dtype=dtype, opsVersion=17 if 'world' in name.lower() else 15, externalData=True, splitExternalData=False, fp32inout=True, quantized=False, heads=headsnume,cname=name)
         convert.RnnRWKV(ops,w)
     def convert(self):
         print(f'Reading {self.src_path}')

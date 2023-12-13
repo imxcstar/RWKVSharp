@@ -68,28 +68,38 @@ namespace RWKV
                 case OnnxModelType.FP16:
                     {
                         var state = new List<Tensor<Float16>>();
+                        var state2 = new List<Tensor<Float16>>();
                         for (int i = 0; i < _layers; i++)
                         {
-                            state.Add(GDenseTensor(new Float16(0)));
-                            state.Add(GDenseTensor(new Float16(0)));
-                            state.Add(GDenseTensor(new Float16(0)));
-                            state.Add(GDenseTensor(new Float16(0)));
-                            state.Add(GDenseTensor(Float16.NegativeInfinity));
+                            var tstate= new DenseTensor<Float16>(new int[] { _embed });
+                            var tstate1 = new DenseTensor<Float16>(new int[] { _embed });
+                            var tstate2 = new DenseTensor<Float16>(new int[] { 40, 64, 64 });
+                            tstate.Fill(new Float16(0));
+                            tstate1.Fill(new Float16(0));
+                            tstate2.Fill(new Float16(0));
+                            state.Add(tstate);
+                            state.Add(tstate1);
+                            state2.Add(tstate2);
                         }
-                        return state;
+                        return (state, state2);
                     }
                 case OnnxModelType.FP32:
                     {
                         var state = new List<Tensor<float>>();
+                        var state2 = new List<Tensor<float>>();
                         for (int i = 0; i < _layers; i++)
                         {
-                            state.Add(GDenseTensor<float>(0));
-                            state.Add(GDenseTensor<float>(0));
-                            state.Add(GDenseTensor<float>(0));
-                            state.Add(GDenseTensor<float>(0));
-                            state.Add(GDenseTensor(float.NegativeInfinity));
+                            var tstate = new DenseTensor<float>(new int[] { _embed });
+                            var tstate1 = new DenseTensor<float>(new int[] { _embed });
+                            var tstate2 = new DenseTensor<float>(new int[] { 40, 64, 64 });
+                            tstate.Fill(0.01f);
+                            tstate1.Fill(0.01f);
+                            tstate2.Fill(0.01f);
+                            state.Add(tstate);
+                            state.Add(tstate1);
+                            state2.Add(tstate2);
                         }
-                        return state;
+                        return (state, state2);
                     };
                 default:
                     throw new NotSupportedException();
@@ -102,12 +112,12 @@ namespace RWKV
             {
                 case OnnxModelType.FP16:
                     {
-                        var ret = Forward_FP16(xi, (List<Tensor<Float16>>)state);
+                        var ret = Forward_FP16(xi, ((List<Tensor<Float16>>, List<Tensor<Float16>>))state);
                         return (ret.logits.Select(x => x.ToFloat()).AsEnumerable(), ret.state);
                     }
                 case OnnxModelType.FP32:
                     {
-                        var ret = Forward_FP32(xi, (List<Tensor<float>>)state);
+                        var ret = Forward_FP32(xi, ((List<Tensor<float>>, List<Tensor<float>>))state);
                         return (ret.logits.AsEnumerable(), ret.state);
                     }
                 default:
@@ -115,40 +125,44 @@ namespace RWKV
             }
         }
 
-        private (Tensor<Float16> logits, IList<Tensor<Float16>> state) Forward_FP16(int xi, List<Tensor<Float16>> state)
+        private (Tensor<Float16> logits, (List<Tensor<Float16>>, List<Tensor<Float16>>) state) Forward_FP16(int xi, (List<Tensor<Float16>>, List<Tensor<Float16>>) state)
         {
             _inputs.Clear();
             var input = new DenseTensor<int>(new[] { xi }, new[] { 1 });
             _inputs.Add(NamedOnnxValue.CreateFromTensor(_input_names.First(), input));
             for (int i = 1; i < _input_names.Count; i++)
             {
-                _inputs.Add(NamedOnnxValue.CreateFromTensor(_input_names[i], state[i - 1]));
+                if (_input_names[i].Contains("wkv"))
+                {
+                    _inputs.Add(NamedOnnxValue.CreateFromTensor(_input_names[i], state.Item2[i - state.Item1.Count]));
+                }
+                else
+                {
+                    _inputs.Add(NamedOnnxValue.CreateFromTensor(_input_names[i], state.Item1[i - 1]));
+                }
             }
             var data = _inferenceSession.Run(_inputs);
-            return (data.First().AsTensor<Float16>(), data.Skip(1).Select(x => x.AsTensor<Float16>()).ToList());
+            return (data.First().AsTensor<Float16>(), (data.Skip(1).Take(state.Item1.Count + 1).Select(x => x.AsTensor<Float16>()).ToList(), data.Skip(state.Item1.Count + 1).Select(x => x.AsTensor<Float16>()).ToList()));
         }
 
-        private (Tensor<float> logits, IList<Tensor<float>> state) Forward_FP32(int xi, IList<Tensor<float>> state)
+        private (Tensor<float> logits, (List<Tensor<float>>, List<Tensor<float>>) state) Forward_FP32(int xi, (List<Tensor<float>>, List<Tensor<float>>) state)
         {
             _inputs.Clear();
             var input = new DenseTensor<int>(new[] { xi }, new[] { 1 });
             _inputs.Add(NamedOnnxValue.CreateFromTensor(_input_names.First(), input));
             for (int i = 1; i < _input_names.Count; i++)
             {
-                _inputs.Add(NamedOnnxValue.CreateFromTensor(_input_names[i], state[i - 1]));
+                if (_input_names[i].Contains("wkv"))
+                {
+                    _inputs.Add(NamedOnnxValue.CreateFromTensor(_input_names[i], state.Item2[i - state.Item1.Count - 1]));
+                }
+                else
+                {
+                    _inputs.Add(NamedOnnxValue.CreateFromTensor(_input_names[i], state.Item1[i - 1]));
+                }
             }
             var data = _inferenceSession.Run(_inputs);
-            return (data.First().AsTensor<float>(), data.Skip(1).Select(x => x.AsTensor<float>()).ToList());
-        }
-
-        private DenseTensor<T> GDenseTensor<T>(T value)
-        {
-            var tvalue = new DenseTensor<T>(_embed);
-            for (int i2 = 0; i2 < _embed; i2++)
-            {
-                tvalue[i2] = value;
-            }
-            return tvalue;
+            return (data.First().AsTensor<float>(), (data.Skip(1).Take(state.Item1.Count + 1).Select(x => x.AsTensor<float>()).ToList(), data.Skip(state.Item1.Count + 1).Select(x => x.AsTensor<float>()).ToList()));
         }
 
         public object GetStates(int[] tokens)
