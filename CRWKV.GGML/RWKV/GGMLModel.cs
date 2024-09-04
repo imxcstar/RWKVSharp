@@ -16,10 +16,10 @@ namespace RWKV
         private int _stateCount;
         private int _logitsCount;
 
-        public GGMLModel(string model)
+        public GGMLModel(string model, uint? n_threads = null, uint? n_gpu_layers = null)
         {
             _modelPath = model;
-            _model = RwkvCppNative.rwkv_init_from_file(model, (uint)(Math.Max(1, Environment.ProcessorCount - 4)));
+            _model = RwkvCppNative.rwkv_init_from_file(model, n_threads ?? (uint)(Math.Max(1, Environment.ProcessorCount - 4)), n_gpu_layers ?? 0);
             _stateCount = (int)RwkvCppNative.rwkv_get_state_len(_model);
             _logitsCount = (int)RwkvCppNative.rwkv_get_logits_len(_model);
         }

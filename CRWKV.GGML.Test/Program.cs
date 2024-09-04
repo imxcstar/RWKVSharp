@@ -2,7 +2,7 @@
 using RWKV;
 
 var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Model");
-var models = Directory.GetFiles(path, "*.bin").Select(x => Path.GetFileName(x)).ToList();
+var models = Directory.GetFiles(path).Where(x => ".bin;.gguf".Contains(Path.GetExtension(x))).Select(x => Path.GetFileName(x)).ToList();
 if (models.Count == 0)
 {
     Console.WriteLine($"Model folder No model, please go to \"https://huggingface.co/imxcstar/rwkv-4-raven-ggml/tree/main\" Download model to \"{path}\"");
@@ -30,7 +30,7 @@ Console.WriteLine($"Loading...");
 
 var rf = new RunnerFactory();
 var tokenizerFileName = "20B_tokenizer.json";
-if (modelName.ToLower().Contains("world"))
+if (modelName.ToLower().Contains("world") || modelName.ToLower().Contains("finch") || modelName.ToLower().Contains("rwkv-6"))
     tokenizerFileName = "rwkv_vocab_v20230424.txt";
 rf.RegisterRWKVGGMLModel(Path.Combine(path, modelName), Path.Combine(path, tokenizerFileName));
 

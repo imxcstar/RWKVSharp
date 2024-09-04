@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+		<TargetFrameworks>net6.0</TargetFrameworks>
 		<RootNamespace>RWKV</RootNamespace>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
@@ -25,10 +25,11 @@
 	<ItemGroup>
 		<ProjectReference Include="..\CLLM.Core\CLLM.Core.csproj" />
 	</ItemGroup>
-	
+
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-		<ItemGroup Condition="'$(Configuration)'=='Debug'">
-			<None Include="..\libs\rwkv.cpp\out\build\x64-Debug\bin\rwkv.dll">
+		<Exec Command="$(MSBuildProjectDirectory)\build.bat &quot;$(MSBuildProjectDirectory)&quot;" WorkingDirectory="$(MSBuildProjectDirectory)" />
+		<ItemGroup>
+			<None Update="rwkv.dll">
 				<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			</None>
 		</ItemGroup>

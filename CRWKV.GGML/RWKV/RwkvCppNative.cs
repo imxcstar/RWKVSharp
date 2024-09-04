@@ -10,7 +10,7 @@ namespace RWKV
 {
     public static partial class RwkvCppNative
     {
-        private const string LIBRARY_NAME = "librwkv";
+        private const string LIBRARY_NAME = "rwkv";
 
         /// <summary>
         /// Represents an error encountered during a function call.
@@ -18,27 +18,29 @@ namespace RWKV
         /// </summary>
         public enum RwkvErrorFlags
         {
-            None = 0,
-            Args = 1 << 8,
-            File = 2 << 8,
-            Model = 3 << 8,
-            ModelParams = 4 << 8,
-            Graph = 5 << 8,
-            Ctx = 6 << 8,
-            Alloc = 1,
-            FileOpen = 2,
-            FileStat = 3,
-            FileRead = 4,
-            FileWrite = 5,
-            FileMagic = 6,
-            FileVersion = 7,
-            DataType = 8,
-            Unsupported = 9,
-            Shape = 10,
-            Dimension = 11,
-            Key = 12,
-            Data = 13,
-            ParamMissing = 14
+            RWKV_ERROR_NONE = 0,
+
+            RWKV_ERROR_ARGS = 1 << 8,
+            RWKV_ERROR_FILE = 2 << 8,
+            RWKV_ERROR_MODEL = 3 << 8,
+            RWKV_ERROR_MODEL_PARAMS = 4 << 8,
+            RWKV_ERROR_GRAPH = 5 << 8,
+            RWKV_ERROR_CTX = 6 << 8,
+
+            RWKV_ERROR_ALLOC = 1,
+            RWKV_ERROR_FILE_OPEN = 2,
+            RWKV_ERROR_FILE_STAT = 3,
+            RWKV_ERROR_FILE_READ = 4,
+            RWKV_ERROR_FILE_WRITE = 5,
+            RWKV_ERROR_FILE_MAGIC = 6,
+            RWKV_ERROR_FILE_VERSION = 7,
+            RWKV_ERROR_DATA_TYPE = 8,
+            RWKV_ERROR_UNSUPPORTED = 9,
+            RWKV_ERROR_SHAPE = 10,
+            RWKV_ERROR_DIMENSION = 11,
+            RWKV_ERROR_KEY = 12,
+            RWKV_ERROR_DATA = 13,
+            RWKV_ERROR_PARAM_MISSING = 14
         }
 
         /// <summary>
@@ -98,14 +100,15 @@ namespace RWKV
         /// </summary>
         /// <param name="model_file_path">path to model file in ggml format.</param>
         /// <param name="n_threads">count of threads to use, must be positive.</param>
+        /// <param name="n_gpu_layers">count of layers need to load to gpu</param>
         /// <returns></returns>
 #if NET7_0_OR_GREATER
         [LibraryImport(LIBRARY_NAME, StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        public static partial IntPtr rwkv_init_from_file(string model_file_path, uint n_threads);
+        public static partial IntPtr rwkv_init_from_file(string model_file_path, uint n_threads, uint n_gpu_layers);
 #else
         [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr rwkv_init_from_file(string model_file_path, uint n_threads);
+        public static extern IntPtr rwkv_init_from_file(string model_file_path, uint n_threads, uint n_gpu_layers);
 #endif
 
         /// <summary>
