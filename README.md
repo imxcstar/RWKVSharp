@@ -1,10 +1,6 @@
-## Support RWKV4 Raven/World RWKV5 1B5-14B (onnx/ggml) (CPU/GPU)
+## Support RWKV4 Raven/World RWKV5 / RWKV6 World/Finch 1B5-14B (ggml) (CPU/GPU)
 
-[Demo Download](https://github.com/imxcstar/CSharp-RWKV-V4/releases)
-
-[Onnx Model Download](https://huggingface.co/imxcstar/rwkv-4-raven-onnx/tree/main)
-
-[GGML Model Download](https://huggingface.co/imxcstar/rwkv-4-raven-ggml/tree/main) | [Download2](https://huggingface.co/BlinkDL/rwkv-4-raven/tree/main)
+[Use Reference rwkv.cpp](https://github.com/saharNooby/rwkv.cpp)
 
 ## Model placement location
 
@@ -18,9 +14,8 @@
 
 ## Reference Links
 
-* **RWKV Hugging Face repo**: https://huggingface.co/BlinkDL/rwkv-4-raven
-* **Onnx**: https://github.com/harrisonvanderbyl/rwkv-onnx
-* **GGML**: https://github.com/saharNooby/rwkv.cpp
+* **RWKV Hugging Face repo**: https://huggingface.co/RWKV
+* **rwkv.cpp**: https://github.com/saharNooby/rwkv.cpp
 * **RWKV**: https://github.com/BlinkDL/RWKV-LM
 * **ChatRWKV**: https://github.com/BlinkDL/ChatRWKV
 * **Tokenizer**: https://github.com/Alex1911-Jiang/GPT-3-Encoder-Sharp
