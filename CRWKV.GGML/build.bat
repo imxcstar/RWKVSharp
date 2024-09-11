@@ -12,3 +12,4 @@ cmake ..\..\..\libs\rwkv.cpp\ -G "Visual Studio 17 2022"
 msbuild rwkv.cpp.sln /p:Configuration=Release
 
 set RWKVDllPath="%MSBuildProjectDirectory%\obj\rwkv\bin\Release\rwkv.dll"
+copy /V /Y %RWKVDllPath:"=% %MSBuildProjectDirectory%

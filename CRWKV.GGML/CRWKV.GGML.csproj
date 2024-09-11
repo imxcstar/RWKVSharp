@@ -27,15 +27,11 @@
 	</ItemGroup>
 
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-		<Exec Command="$(MSBuildProjectDirectory)\build.bat &quot;$(MSBuildProjectDirectory)&quot;" WorkingDirectory="$(MSBuildProjectDirectory)" Condition="'$(Configuration)'=='Debug'" />
-		<Copy SourceFiles="$(MSBuildProjectDirectory)\obj\rwkv\bin\Release\rwkv.dll" DestinationFolder="$(TargetDir)" Condition="'$(Configuration)'=='Debug'" />
-		<Copy SourceFiles="$(MSBuildProjectDirectory)\obj\rwkv\bin\Release\rwkv.dll" DestinationFolder="$(MSBuildProjectDirectory)" Condition="'$(Configuration)'=='Debug'" />
+		<Exec Command="$(MSBuildProjectDirectory)\build.bat &quot;$(MSBuildProjectDirectory)&quot;" WorkingDirectory="$(MSBuildProjectDirectory)" />
 	</Target>
 
-	<ItemGroup Condition="'$(Configuration)'=='Debug'">
-		<None Update="rwkv.dll">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
+	<ItemGroup>
+		<None Include="$(MSBuildProjectDirectory)\rwkv.dll" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 
 </Project>
