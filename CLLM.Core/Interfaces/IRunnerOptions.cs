@@ -12,6 +12,5 @@ namespace CLLM.Core.Interfaces
     {
         public Func<ITokenizer> Tokenizer { get; set; }
         public Func<ISampler> Sampler { get; set; }
-        public int MaxTokens { get; set; }
     }
 }

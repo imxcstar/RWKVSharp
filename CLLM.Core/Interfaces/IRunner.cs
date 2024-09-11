@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CLLM.Core.Sampler;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,8 +16,14 @@ namespace CLLM.Core.Interfaces
         public void Init(string name, IModel? model, IRunnerOptions? options);
 
         public void InitInstruction(string instruction);
-        public void Run(string value, Action<string> callBack, object? rawValue = null);
-        public string Run(string value, object? rawValue = null);
-        public IAsyncEnumerable<string> RunAsync(string value, object? rawValue = null);
+        public void Run(string value, Action<string> callBack, RunOptions? options = null);
+        public string Run(string value, RunOptions? options = null);
+        public IAsyncEnumerable<string> RunAsync(string value, RunOptions? options = null);
+    }
+
+    public class RunOptions
+    {
+        public int MaxTokens { get; set; } = 512;
+        public ISampler? Sampler { get; set; }
     }
 }

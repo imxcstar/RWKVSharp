@@ -1,4 +1,6 @@
 ﻿using CLLM.Core;
+using CLLM.Core.Interfaces;
+using CLLM.Core.Sampler;
 using RWKV;
 
 var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Model");

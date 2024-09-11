@@ -7,9 +7,9 @@ namespace CLLM.Core
 {
     public class Runner : RunnerBase
     {
-        private ITokenizer _tokenizer;
-        private ISampler _sampler;
-        private object _state;
+        private ITokenizer _tokenizer = null!;
+        private ISampler _sampler = null!;
+        private object _state = null!;
 
         public override void Init(string name, IModel model, IRunnerOptions options)
         {
@@ -22,27 +22,29 @@ namespace CLLM.Core
         public override void InitInstruction(string instruction)
         {
             var tokens = _tokenizer.Encode(instruction);
-            _state = Model.GetStates(tokens.ToArray());
+            _state = Model!.GetStates(tokens.ToArray());
         }
 
-        public override async IAsyncEnumerable<string> RunAsync(string value, object? rawValue = null)
+        public override async IAsyncEnumerable<string> RunAsync(string value, RunOptions? options = null)
         {
             var xutput = new Queue<int>(_tokenizer.Encode(value));
             var size = xutput.Count;
             var input = 0;
             var strEnc = new List<int>();
-            for (int i = 0; i < size + Options.MaxTokens; i++)
+            var maxTokens = options?.MaxTokens ?? 512;
+            var sampler = options?.Sampler ?? _sampler;
+            for (int i = 0; i < size + maxTokens; i++)
             {
                 if (xutput.Count > 0)
                 {
                     input = xutput.Dequeue();
                 }
-                var logits_state = await Task.FromResult(Model.Forward(input, _state));
+                var logits_state = await Task.FromResult(Model!.Forward(input, _state));
                 _state = logits_state.state;
 
                 if (xutput.Count == 0)
                 {
-                    var ac = await Task.FromResult(_sampler.Sample(logits_state.logits));
+                    var ac = await Task.FromResult(sampler.Sample(logits_state.logits));
                     if (ac == 0)
                         break;
                     input = ac;
