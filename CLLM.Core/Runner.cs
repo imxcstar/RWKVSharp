@@ -2,6 +2,7 @@
 using CLLM.Core.Sampler;
 using CLLM.Core.Tokenizer;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace CLLM.Core
 {
@@ -25,7 +26,7 @@ namespace CLLM.Core
             _state = Model!.GetStates(tokens.ToArray());
         }
 
-        public override async IAsyncEnumerable<string> RunAsync(string value, RunOptions? options = null)
+        public override async IAsyncEnumerable<string> GenerateAsync(string value, RunOptions? options = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             var xutput = new Queue<int>(_tokenizer.Encode(value));
             var size = xutput.Count;
@@ -35,6 +36,8 @@ namespace CLLM.Core
             var sampler = options?.Sampler ?? _sampler;
             for (int i = 0; i < size + maxTokens; i++)
             {
+                if (cancellationToken.IsCancellationRequested)
+                    break;
                 if (xutput.Count > 0)
                 {
                     input = xutput.Dequeue();

@@ -26,11 +26,11 @@ namespace CLLM.Core
 
         public abstract void InitInstruction(string instruction);
 
-        public virtual void Run(string value, Action<string> callBack, RunOptions? options = null)
+        public virtual void Generate(string value, Action<string> callBack, RunOptions? options = null)
         {
             var task = Task.Run(async () =>
             {
-                await foreach (var item in RunAsync(value, options))
+                await foreach (var item in GenerateAsync(value, options))
                 {
                     callBack?.Invoke(item);
                 }
@@ -38,12 +38,12 @@ namespace CLLM.Core
             task.Wait();
         }
 
-        public virtual string Run(string value, RunOptions? options = null)
+        public virtual string Generate(string value, RunOptions? options = null)
         {
             var ret = new List<string>();
             var task = Task.Run(async () =>
             {
-                await foreach (var item in RunAsync(value, options))
+                await foreach (var item in GenerateAsync(value, options))
                 {
                     ret.Add(item);
                 }
@@ -52,6 +52,6 @@ namespace CLLM.Core
             return string.Join("", ret);
         }
 
-        public abstract IAsyncEnumerable<string> RunAsync(string value, RunOptions? options = null);
+        public abstract IAsyncEnumerable<string> GenerateAsync(string value, RunOptions? options = null, CancellationToken cancellationToken = default);
     }
 }

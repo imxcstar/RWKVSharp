@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0</TargetFrameworks>
+		<TargetFrameworks>net8.0</TargetFrameworks>
 		<RootNamespace>RWKV</RootNamespace>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
@@ -32,6 +32,7 @@
 
 	<ItemGroup>
 		<None Include="$(MSBuildProjectDirectory)\rwkv.dll" CopyToOutputDirectory="PreserveNewest" />
+		<None Include="$(MSBuildProjectDirectory)\ggml.dll" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
-
+	
 </Project>

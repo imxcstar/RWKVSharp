@@ -44,6 +44,6 @@ while (true)
     var value = Console.ReadLine();
     if (string.IsNullOrEmpty(value))
         continue;
-    r.Run(value.Replace("\\r\\n", "\r\n").Replace("\\r", "\r").Replace("\\n", "\n"), Console.Write);
+    r.Generate(value.Replace("\\r\\n", "\r\n").Replace("\\r", "\r").Replace("\\n", "\n"), Console.Write);
     Console.WriteLine();
 }

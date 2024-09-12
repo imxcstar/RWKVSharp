@@ -56,43 +56,28 @@ namespace RWKV
         ///   whether error messages should be automatically printed.
         /// </param>
         /// <returns></returns>
-#if NET7_0_OR_GREATER
         [LibraryImport(LIBRARY_NAME)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         public static partial void rwkv_set_print_errors(IntPtr ctx, [MarshalAs(UnmanagedType.I1)] bool print_errors);
-#else
-        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void rwkv_set_print_errors(IntPtr ctx, bool print_errors);
-#endif
 
         /// <summary>
         /// Gets whether errors are automatically printed to stderr.
         /// </summary>
         /// <param name="ctx">the context to retrieve the setting for, or NULL for the global setting.</param>
         /// <returns></returns>
-#if NET7_0_OR_GREATER
         [LibraryImport(LIBRARY_NAME)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool rwkv_get_print_errors(IntPtr ctx);
-#else
-        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool rwkv_get_print_errors(IntPtr ctx);
-#endif
 
         /// <summary>
         /// Retrieves and clears the error flags.
         /// </summary>
         /// <param name="ctx">the context the retrieve the error for, or NULL for the global error.</param>
         /// <returns></returns>
-#if NET7_0_OR_GREATER
         [LibraryImport(LIBRARY_NAME)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         public static partial RwkvErrorFlags rwkv_get_last_error(IntPtr ctx);
-#else
-        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
-        public static extern RwkvErrorFlags rwkv_get_last_error(IntPtr ctx);
-#endif
 
         /// <summary>
         /// Loads the model from a file and prepares it for inference.
@@ -102,14 +87,9 @@ namespace RWKV
         /// <param name="n_threads">count of threads to use, must be positive.</param>
         /// <param name="n_gpu_layers">count of layers need to load to gpu</param>
         /// <returns></returns>
-#if NET7_0_OR_GREATER
         [LibraryImport(LIBRARY_NAME, StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         public static partial IntPtr rwkv_init_from_file(string model_file_path, uint n_threads, uint n_gpu_layers);
-#else
-        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr rwkv_init_from_file(string model_file_path, uint n_threads, uint n_gpu_layers);
-#endif
 
         /// <summary>
         /// Creates a new context from an existing one.
@@ -120,35 +100,9 @@ namespace RWKV
         /// <param name="ctx">context to be cloned.</param>
         /// <param name="n_threads">count of threads to use, must be positive.</param>
         /// <returns></returns>
-#if NET7_0_OR_GREATER
         [LibraryImport(LIBRARY_NAME)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         public static partial IntPtr rwkv_clone_context(IntPtr ctx, uint n_threads);
-#else
-        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr rwkv_clone_context(IntPtr ctx, uint n_threads);
-#endif
-
-        /// <summary>
-        /// Offloads specified count of model layers onto the GPU. Offloaded layers are evaluated using cuBLAS or CLBlast.
-        /// For the purposes of this function, model head (unembedding matrix) is treated as an additional layer:
-        /// - pass `rwkv_get_n_layer(ctx)` to offload all layers except model head
-        /// - pass `rwkv_get_n_layer(ctx) + 1` to offload all layers, including model head
-        /// Returns true if at least one layer was offloaded.
-        /// If rwkv.cpp was compiled without cuBLAS and CLBlast support, this function is a no-op and always returns false.
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="n_layers"></param>
-        /// <returns></returns>
-#if NET7_0_OR_GREATER
-        [LibraryImport(LIBRARY_NAME)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static partial bool rwkv_gpu_offload_layers(IntPtr ctx, uint n_layers);
-#else
-        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool rwkv_gpu_offload_layers(IntPtr ctx, uint n_layers);
-#endif
 
         /// <summary>
         /// Evaluates the model for a single token.
@@ -162,15 +116,10 @@ namespace RWKV
         /// <param name="state_out">FP32 buffer of size rwkv_get_state_len(). This buffer will be written to if non-NULL.</param>
         /// <param name="logits_out">FP32 buffer of size rwkv_get_logits_len(). This buffer will be written to if non-NULL.</param>
         /// <returns></returns>
-#if NET7_0_OR_GREATER
         [LibraryImport(LIBRARY_NAME)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool rwkv_eval(IntPtr ctx, uint token, IntPtr state_in, IntPtr state_out, IntPtr logits_out);
-#else
-        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool rwkv_eval(IntPtr ctx, uint token, IntPtr state_in, IntPtr state_out, IntPtr logits_out);
-#endif
 
         /// <summary>
         /// Evaluates the model for a sequence of tokens.
@@ -199,15 +148,10 @@ namespace RWKV
         /// <param name="state_out">FP32 buffer of size rwkv_get_state_len(). This buffer will be written to if non-NULL.</param>
         /// <param name="logits_out">FP32 buffer of size rwkv_get_logits_len(). This buffer will be written to if non-NULL.</param>
         /// <returns></returns>
-#if NET7_0_OR_GREATER
         [LibraryImport(LIBRARY_NAME)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool rwkv_eval_sequence(IntPtr ctx, uint[] tokens, ulong sequence_len, IntPtr state_in, IntPtr state_out, IntPtr logits_out);
-#else
-        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool rwkv_eval_sequence(IntPtr ctx, uint[] tokens, ulong sequence_len, IntPtr state_in, IntPtr state_out, IntPtr logits_out);
-#endif
 
         /// <summary>
         /// Evaluates the model for a sequence of tokens using `rwkv_eval_sequence`, splitting a potentially long sequence into fixed-length chunks.
@@ -229,15 +173,10 @@ namespace RWKV
         /// <param name="state_out">FP32 buffer of size rwkv_get_state_len(). This buffer will be written to if non-NULL.</param>
         /// <param name="logits_out">FP32 buffer of size rwkv_get_logits_len(). This buffer will be written to if non-NULL.</param>
         /// <returns></returns>
-#if NET7_0_OR_GREATER
         [LibraryImport(LIBRARY_NAME)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool rwkv_eval_sequence_in_chunks(IntPtr ctx, uint[] tokens, ulong sequence_len, ulong chunk_size, IntPtr state_in, IntPtr state_out, IntPtr logits_out);
-#else
-        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool rwkv_eval_sequence_in_chunks(IntPtr ctx, uint[] tokens, ulong sequence_len, ulong chunk_size, IntPtr state_in, IntPtr state_out, IntPtr logits_out);
-#endif
 
         /// <summary>
         /// Returns the number of tokens in the given model's vocabulary.
@@ -245,14 +184,9 @@ namespace RWKV
         /// </summary>
         /// <param name="ctx"></param>
         /// <returns></returns>
-#if NET7_0_OR_GREATER
         [LibraryImport(LIBRARY_NAME)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         public static partial ulong rwkv_get_n_vocab(IntPtr ctx);
-#else
-        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong rwkv_get_n_vocab(IntPtr ctx);
-#endif
 
         /// <summary>
         /// Returns the number of elements in the given model's embedding.
@@ -260,14 +194,9 @@ namespace RWKV
         /// </summary>
         /// <param name="ctx"></param>
         /// <returns></returns>
-#if NET7_0_OR_GREATER
         [LibraryImport(LIBRARY_NAME)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         public static partial ulong rwkv_get_n_embed(IntPtr ctx);
-#else
-        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong rwkv_get_n_embed(IntPtr ctx);
-#endif
 
         /// <summary>
         /// Returns the number of layers in the given model.
@@ -277,14 +206,9 @@ namespace RWKV
         /// </summary>
         /// <param name="ctx"></param>
         /// <returns></returns>
-#if NET7_0_OR_GREATER
         [LibraryImport(LIBRARY_NAME)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         public static partial ulong rwkv_get_n_layer(IntPtr ctx);
-#else
-        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong rwkv_get_n_layer(IntPtr ctx);
-#endif
 
         /// <summary>
         /// Returns the number of float elements in a complete state for the given model.
@@ -292,14 +216,9 @@ namespace RWKV
         /// </summary>
         /// <param name="ctx"></param>
         /// <returns></returns>
-#if NET7_0_OR_GREATER
         [LibraryImport(LIBRARY_NAME)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         public static partial ulong rwkv_get_state_len(IntPtr ctx);
-#else
-        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong rwkv_get_state_len(IntPtr ctx);
-#endif
 
         /// <summary>
         /// Returns the number of float elements in the logits output of a given model.
@@ -307,14 +226,9 @@ namespace RWKV
         /// </summary>
         /// <param name="ctx"></param>
         /// <returns></returns>
-#if NET7_0_OR_GREATER
         [LibraryImport(LIBRARY_NAME)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         public static partial ulong rwkv_get_logits_len(IntPtr ctx);
-#else
-        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong rwkv_get_logits_len(IntPtr ctx);
-#endif
 
         /// <summary>
         /// Initializes the given state so that passing it to rwkv_eval or rwkv_eval_sequence would be identical to passing NULL.
@@ -323,28 +237,18 @@ namespace RWKV
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="state">FP32 buffer of size rwkv_get_state_len() to initialize</param>
-#if NET7_0_OR_GREATER
         [LibraryImport(LIBRARY_NAME)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         public static partial void rwkv_init_state(IntPtr ctx, float[] state);
-#else
-        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void rwkv_init_state(IntPtr ctx, float[] state);
-#endif
 
         /// <summary>
         /// Frees all allocated memory and the context.
         /// Does not need to be called on the same thread that created the rwkv_context.
         /// </summary>
         /// <param name="ctx"></param>
-#if NET7_0_OR_GREATER
         [LibraryImport(LIBRARY_NAME)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         public static partial void rwkv_free(IntPtr ctx);
-#else
-        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void rwkv_free(IntPtr ctx);
-#endif
 
         /// <summary>
         /// Quantizes FP32 or FP16 model to one of quantized formats.
@@ -362,27 +266,17 @@ namespace RWKV
         /// - Q8_0
         /// </param>
         /// <returns></returns>
-#if NET7_0_OR_GREATER
         [LibraryImport(LIBRARY_NAME, StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool rwkv_quantize_model_file(string model_file_path_in, string model_file_path_out, string format_name);
-#else
-        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool rwkv_quantize_model_file(string model_file_path_in, string model_file_path_out, string format_name);
-#endif
 
         /// <summary>
         /// Returns system information string.
         /// </summary>
         /// <returns></returns>
-#if NET7_0_OR_GREATER
         [LibraryImport(LIBRARY_NAME, StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         public static partial string rwkv_get_system_info_string();
-#else
-        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
-        public static extern string rwkv_get_system_info_string();
-#endif
     }
 }
