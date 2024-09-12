@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<RootNamespace>RWKVSharp.Core</RootNamespace>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Platforms>AnyCPU</Platforms>
+
+		<AssemblyName>RWKVSharp.Core</AssemblyName>
+		<RootNamespace>RWKVSharp.Core</RootNamespace>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Authors>xcssa</Authors>
+		<Company>SSA</Company>
+		<Description>Implementation of a Custom LLM Model Abstract Factory Pattern</Description>
+		<PackageProjectUrl>https://github.com/imxcstar/CSharp-RWKV-V4</PackageProjectUrl>
+		<PackageId>$(AssemblyName)</PackageId>
+		<Version>0.0.2</Version>
+	</PropertyGroup>
+	
+</Project>

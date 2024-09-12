@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net8.0</TargetFrameworks>
+		<RootNamespace>RWKVSharp</RootNamespace>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<Platforms>AnyCPU</Platforms>
+
+		<AssemblyName>RWKVSharp.GGML</AssemblyName>
+		<RootNamespace>RWKVSharp.GGML</RootNamespace>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Authors>xcssa</Authors>
+		<Company>SSA</Company>
+		<Description>
+			rwkv.cpp ggml wrapper for rwkv llm model (cpu)
+			(Only supports Windows, please download other systems“ https://github.com/saharNooby/rwkv.cpp Compile as rwkv.so)
+		</Description>
+		<PackageProjectUrl>https://github.com/imxcstar/CSharp-RWKV-V4</PackageProjectUrl>
+		<PackageId>$(AssemblyName)</PackageId>
+		<Version>0.0.2</Version>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\RWKVSharp.Core\RWKVSharp.Core.csproj" />
+	</ItemGroup>
+
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+		<Exec Command="$(MSBuildProjectDirectory)\build.bat &quot;$(MSBuildProjectDirectory)&quot;" WorkingDirectory="$(MSBuildProjectDirectory)" />
+	</Target>
+
+	<ItemGroup>
+		<None Include="$(MSBuildProjectDirectory)\rwkv.dll" CopyToOutputDirectory="PreserveNewest" />
+		<None Include="$(MSBuildProjectDirectory)\ggml.dll" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+	
+</Project>

@@ -4,9 +4,9 @@
 Development Environment: Windows, Visual Studio 2022
 
 ```
-git clone https://github.com/imxcstar/CSharp-RWKV.git
+git clone https://github.com/imxcstar/RWKVSharp.git
 
-cd CSharp-RWKV
+cd RWKVSharp
 
 git submodule update --progress --init --remote
 
@@ -15,11 +15,11 @@ git submodule update --progress --init --recursive
 
 Download model from [Hugging Face](https://huggingface.co/BlinkDL)
 
-Open CRWKV.sln
+Open RWKVSharp.sln
 
-Compile the CRWKV.GGML.Convert project and then use this project to convert the downloaded model.
+Compile the RWKVSharp.GGML.Convert project and then use this project to convert the downloaded model.
 
-Compile the CRWKV.GGML.Test project, and then put the converted model model into the Model directory in the project.
+Compile the RWKVSharp.GGML.Test project, and then put the converted model model into the Model directory in the project.
 
 ## Model placement location
 
