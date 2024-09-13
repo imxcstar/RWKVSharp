@@ -21,6 +21,8 @@ Compile the RWKVSharp.GGML.Convert project and then use this project to convert 
 
 Compile the RWKVSharp.GGML.Test project, and then put the converted model model into the Model directory in the project.
 
+[Download rwkv native libraries for other systems](https://github.com/RWKV/rwkv.cpp/releases)
+
 ## Model placement location
 
 ![3.png](/Preview/3.png)
