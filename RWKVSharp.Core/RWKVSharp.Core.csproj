@@ -13,7 +13,7 @@
 		<Authors>xcssa</Authors>
 		<Company>SSA</Company>
 		<Description>Implementation of a Custom LLM Model Abstract Factory Pattern</Description>
-		<PackageProjectUrl>https://github.com/imxcstar/CSharp-RWKV-V4</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/imxcstar/RWKVSharp</PackageProjectUrl>
 		<PackageId>$(AssemblyName)</PackageId>
 		<Version>0.0.2</Version>
 	</PropertyGroup>

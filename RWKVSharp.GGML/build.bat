@@ -8,11 +8,26 @@ if not exist %MSBuildProjectDirectory%\obj\rwkv (
 
 cd %MSBuildProjectDirectory%\obj\rwkv
 
-cmake ..\..\..\libs\rwkv.cpp\
+if not exist %MSBuildProjectDirectory%\obj\rwkv\avx (
+    mkdir %MSBuildProjectDirectory%\obj\rwkv\avx
+)
+if not exist %MSBuildProjectDirectory%\obj\rwkv\avx2 (
+    mkdir %MSBuildProjectDirectory%\obj\rwkv\avx2
+)
+if not exist %MSBuildProjectDirectory%\obj\rwkv\avx512 (
+    mkdir %MSBuildProjectDirectory%\obj\rwkv\avx512
+)
+
+cd avx
+cmake -DRWKV_AVX2=OFF ..\..\..\..\libs\rwkv.cpp\
 cmake --build . --config Release
 
-set RWKVDllPath="%MSBuildProjectDirectory%\obj\rwkv\bin\Release\rwkv.dll"
-set GGMLDllPath="%MSBuildProjectDirectory%\obj\rwkv\bin\Release\ggml.dll"
+cd ..
+cd avx2
+cmake ..\..\..\..\libs\rwkv.cpp\
+cmake --build . --config Release
 
-copy /V /Y %RWKVDllPath:"=% %MSBuildProjectDirectory%
-copy /V /Y %GGMLDllPath:"=% %MSBuildProjectDirectory%
+cd ..
+cd avx512
+cmake -DRWKV_AVX512=ON ..\..\..\..\libs\rwkv.cpp\
+cmake --build . --config Release

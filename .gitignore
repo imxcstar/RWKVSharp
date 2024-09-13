@@ -361,5 +361,3 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/RWKVSharp.GGML/rwkv.dll
-/RWKVSharp.GGML/ggml.dll

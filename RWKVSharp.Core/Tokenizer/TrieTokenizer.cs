@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace RWKVSharp.Core.Tokenizer.RWKV
+namespace RWKVSharp.Core.Tokenizer
 {
     public class Trie
     {
@@ -77,7 +77,7 @@ namespace RWKVSharp.Core.Tokenizer.RWKV
                     continue;
                 int idx = int.Parse(line[..line.IndexOf(' ')]);
                 var f = '"';
-                if (Regex.IsMatch(line,$"^{idx}(\\s+)b'") || Regex.IsMatch(line, $"^{idx}(\\s+)'"))
+                if (Regex.IsMatch(line, $"^{idx}(\\s+)b'") || Regex.IsMatch(line, $"^{idx}(\\s+)'"))
                     f = '\'';
                 var q = line.IndexOf(f) + 1;
                 var s = line.LastIndexOf(f);

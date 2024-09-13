@@ -17,7 +17,7 @@
 			rwkv.cpp ggml wrapper for rwkv llm model (cpu)
 			(Only supports Windows, please download other systems“ https://github.com/saharNooby/rwkv.cpp Compile as rwkv.so)
 		</Description>
-		<PackageProjectUrl>https://github.com/imxcstar/CSharp-RWKV-V4</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/imxcstar/RWKVSharp</PackageProjectUrl>
 		<PackageId>$(AssemblyName)</PackageId>
 		<Version>0.0.2</Version>
 	</PropertyGroup>
@@ -31,8 +31,9 @@
 	</Target>
 
 	<ItemGroup>
-		<None Include="$(MSBuildProjectDirectory)\rwkv.dll" CopyToOutputDirectory="PreserveNewest" />
-		<None Include="$(MSBuildProjectDirectory)\ggml.dll" CopyToOutputDirectory="PreserveNewest" />
+		<None Include="$(MSBuildProjectDirectory)\obj\rwkv\avx\bin\Release\rwkv.dll" CopyToOutputDirectory="PreserveNewest" Link="runtimes\win-x64\native\avx\%(Filename)%(Extension)" />
+		<None Include="$(MSBuildProjectDirectory)\obj\rwkv\avx2\bin\Release\rwkv.dll" CopyToOutputDirectory="PreserveNewest" Link="runtimes\win-x64\native\avx2\%(Filename)%(Extension)" />
+		<None Include="$(MSBuildProjectDirectory)\obj\rwkv\avx512\bin\Release\rwkv.dll" CopyToOutputDirectory="PreserveNewest" Link="runtimes\win-x64\native\avx512\%(Filename)%(Extension)" />
 	</ItemGroup>
 	
 </Project>
