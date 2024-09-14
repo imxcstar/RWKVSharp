@@ -56,7 +56,8 @@ namespace RWKVSharp
             if (!string.IsNullOrWhiteSpace(os) && !string.IsNullOrWhiteSpace(arch) && !string.IsNullOrWhiteSpace(avx))
             {
                 var libraryPath = Path.Combine("runtimes", $"{os}-{arch}", "native", avx, $"{RwkvCppNative.LIBRARY_NAME}{library_ex}");
-                NativeLibrary.Load(libraryPath);
+                if (File.Exists(libraryPath))
+                    NativeLibrary.Load(libraryPath);
             }
         }
 
