@@ -1,4 +1,4 @@
-## Support RWKV4 Raven/World RWKV5 / RWKV6 World/Finch 1B5-14B (ggml) (CPU/GPU)
+## Support RWKV4 Raven/World RWKV5 / RWKV6 / RWKV7 World/Finch 1B5-14B (ggml) (CPU/GPU)
 
 ### Use
 Development Environment: Windows, Visual Studio 2022
