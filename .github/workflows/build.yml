@@ -131,15 +131,15 @@ jobs:
           fi
 
       - name: Prepare package structure (CPU-arm64 or Other)
-        if: matrix.type != 'cpu'
+        if: matrix.type != 'cpu' || matrix.arch == 'arm64'
         run: |
           mkdir -p package/runtimes/${{ matrix.rid }}/native
           if [[ "${{ runner.os }}" == "Windows" ]]; then
-            cp build/bin/Release/rwkv.dll package/runtimes/${{ matrix.rid }}/native/
+            cp build/bin/Release/* package/runtimes/${{ matrix.rid }}/native/
           elif [[ "${{ runner.os }}" == "Linux" ]]; then
-            cp build/librwkv.so package/runtimes/${{ matrix.rid }}/native/
+            cp build/* package/runtimes/${{ matrix.rid }}/native/
           elif [[ "${{ runner.os }}" == "macOS" ]]; then
-            cp build/librwkv.dylib package/runtimes/${{ matrix.rid }}/native/
+            cp build/* package/runtimes/${{ matrix.rid }}/native/
           fi
 
       - name: Setup .NET SDK
