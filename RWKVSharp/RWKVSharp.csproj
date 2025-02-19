@@ -1,11 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	
 	<PropertyGroup>
-		<TargetFrameworks>net8.0</TargetFrameworks>
+		<TargetFramework>net8.0</TargetFramework>
 		<RootNamespace>RWKVSharp</RootNamespace>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<Platforms>AnyCPU;x64</Platforms>
+		<Platforms>AnyCPU</Platforms>
+
 		<AssemblyName>RWKVSharp</AssemblyName>
 		<RootNamespace>RWKVSharp</RootNamespace>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -18,11 +20,11 @@
 		</Description>
 		<PackageProjectUrl>https://github.com/imxcstar/RWKVSharp</PackageProjectUrl>
 		<PackageId>$(AssemblyName)</PackageId>
-		<Version>0.0.1</Version>
-		<RuntimeIdentifiers>win-x64;linux-x64;linux-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>
+		<Version>$(NUGET_VERSION)</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\RWKVSharp.Core\RWKVSharp.Core.csproj" />
 	</ItemGroup>
+	
 </Project>

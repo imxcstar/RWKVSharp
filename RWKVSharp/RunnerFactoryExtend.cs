@@ -61,18 +61,18 @@ namespace RWKVSharp
             }
         }
 
-        public static void RegisterRWKVGGMLModel(this RunnerFactory runnerFactory, string modelPath, string tokenizerPath)
+        public static void RegisterRWKVGGMLModel(this RunnerFactory runnerFactory, string modelPath, string tokenizerPath, uint? n_gpu_layers = null)
         {
             LoadLibrary();
-            runnerFactory.RegisterRWKVGGMLModel("Default", modelPath, tokenizerPath);
+            runnerFactory.RegisterRWKVGGMLModel("Default", modelPath, tokenizerPath, n_gpu_layers);
         }
 
-        public static void RegisterRWKVGGMLModel(this RunnerFactory runnerFactory, string name, string modelPath, string tokenizerPath)
+        public static void RegisterRWKVGGMLModel(this RunnerFactory runnerFactory, string name, string modelPath, string tokenizerPath, uint? n_gpu_layers = null)
         {
             LoadLibrary();
             runnerFactory.RegisterRunner<RwkvRunner>(
                 name,
-                new RwkvModel(modelPath),
+                new RwkvModel(modelPath, n_gpu_layers: n_gpu_layers),
                 new RunnerOptions()
                 {
                     Tokenizer = () =>
