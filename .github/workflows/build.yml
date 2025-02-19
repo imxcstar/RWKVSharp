@@ -1,231 +1,219 @@
-name: Build and Package RWKVSharp.Native
+name: Build and Publish .NET Native Packages
+
 on:
+  workflow_dispatch:
+    inputs:
+      create_release:
+        description: 'Create new release'
+        required: true
+        type: boolean
   push:
-    branches: [ dev ]
+    branches: [dev]
+
 env:
-  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  NUGET_VERSION: 1.0.0-${{ github.run_number }}
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+
 jobs:
-  build:
-    name: Build ${{ matrix.package }} (${{ matrix.rid }})
+  build_native:
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
       matrix:
         include:
-          # CPU (All platforms)
-          - package: Cpu
-            os: ubuntu-22.04
-            rid: linux-x64
-            blas: OFF
-            cublas: OFF
-            hipblas: OFF
-            metal: OFF
-          - package: Cpu
-            os: ubuntu-22.04
-            rid: linux-arm64
-            blas: OFF
-            cublas: OFF
-            hipblas: OFF
-            metal: OFF
-          - package: Cpu
-            os: windows-2022
+          # CPU Targets
+          - package_id: RWKVSharp.Native.Cpu.avx.win-x64
+            os: windows-2019
+            arch: x64
+            args: -DRWKV_AVX2=OFF
             rid: win-x64
-            blas: OFF
-            cublas: OFF
-            hipblas: OFF
-            metal: OFF
-          - package: Cpu
-            os: macos-14
-            rid: osx-x64
-            blas: OFF
-            cublas: OFF
-            hipblas: OFF
-            metal: OFF
-          - package: Cpu
-            os: macos-14
-            rid: osx-arm64
-            blas: OFF
-            cublas: OFF
-            hipblas: OFF
-            metal: OFF
-          # OpenBLAS (Linux/Windows)
-          - package: OpenBLAS
-            os: ubuntu-22.04
-            rid: linux-x64
-            blas: ON
-            cublas: OFF
-            hipblas: OFF
-            metal: OFF
-          - package: OpenBLAS
-            os: ubuntu-22.04
-            rid: linux-arm64
-            blas: ON
-            cublas: OFF
-            hipblas: OFF
-            metal: OFF
-          - package: OpenBLAS
-            os: windows-2022
-            rid: win-x64
-            blas: ON
-            cublas: OFF
-            hipblas: OFF
-            metal: OFF
-          # cuBLAS (Linux/Windows with CUDA)
-          - package: cuBLAS
-            os: ubuntu-22.04
-            rid: linux-x64
-            blas: OFF
-            cublas: ON
-            hipblas: OFF
-            metal: OFF
-            cuda: 12.1
-          - package: cuBLAS
-            os: windows-2022
-            rid: win-x64
-            blas: OFF
-            cublas: ON
-            hipblas: OFF
-            metal: OFF
-            cuda: 11.8
-          # Metal (macOS only)
-          - package: Metal
-            os: macos-14
-            rid: osx-x64
-            blas: OFF
-            cublas: OFF
-            hipblas: OFF
-            metal: ON
-          - package: Metal
-            os: macos-14
-            rid: osx-arm64
-            blas: OFF
-            cublas: OFF
-            hipblas: OFF
-            metal: ON
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive  # 确保子模块被初始化
+            mode: avx
+            type: cpu
 
-      # CUDA Setup
+          - package_id: RWKVSharp.Native.Cpu.avx2.win-x64
+            os: windows-2019
+            arch: x64
+            rid: win-x64
+            mode: avx2
+            type: cpu
+
+          - package_id: RWKVSharp.Native.Cpu.avx512.win-x64
+            os: windows-2019
+            arch: x64
+            args: -DRWKV_AVX512=ON
+            rid: win-x64
+            mode: avx512
+            type: cpu
+
+          - package_id: RWKVSharp.Native.Cpu.avx.linux-x64
+            os: ubuntu-latest
+            arch: x64
+            args: -DRWKV_AVX2=OFF
+            rid: linux-x64
+            mode: avx
+            type: cpu
+
+          - package_id: RWKVSharp.Native.Cpu.avx2.linux-x64
+            os: ubuntu-latest
+            arch: x64
+            rid: linux-x64
+            mode: avx2
+            type: cpu
+
+          - package_id: RWKVSharp.Native.Cpu.avx512.linux-x64
+            os: ubuntu-latest
+            arch: x64
+            args: -DRWKV_AVX512=ON
+            rid: linux-x64
+            mode: avx512
+            type: cpu
+
+          - package_id: RWKVSharp.Native.Cpu.avx.osx-x64
+            os: macOS-latest
+            arch: x64
+            args: -DRWKV_AVX2=OFF
+            rid: osx-x64
+            mode: avx
+            type: cpu
+
+          - package_id: RWKVSharp.Native.Cpu.avx2.osx-x64
+            os: macOS-latest
+            arch: x64
+            rid: osx-x64
+            mode: avx2
+            type: cpu
+
+          - package_id: RWKVSharp.Native.Cpu.avx512.osx-x64
+            os: macOS-latest
+            arch: x64
+            args: -DRWKV_AVX512=ON
+            rid: osx-x64
+            mode: avx512
+            type: cpu
+
+          - package_id: RWKVSharp.Native.Cpu.linux-arm64
+            os: ubuntu-latest
+            arch: arm64
+            rid: linux-arm64
+            type: cpu
+
+          # cuBLAS Targets
+          - package_id: RWKVSharp.Native.cuBLAS.win-x64
+            os: windows-2019
+            arch: x64
+            args: -DRWKV_CUBLAS=ON
+            rid: win-x64
+            cuda: 12.2.0
+
+          # Metal Targets
+          - package_id: RWKVSharp.Native.Metal.osx-x64
+            os: macOS-latest
+            arch: x64
+            args: -DRWKV_METAL=ON
+            rid: osx-x64
+
+          - package_id: RWKVSharp.Native.Metal.osx-arm64
+            os: macOS-latest
+            arch: arm64
+            args: -DRWKV_METAL=ON
+            rid: osx-arm64
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
       - name: Setup CUDA
         if: matrix.cuda
-        uses: actions/setup-cuda@v2
+        uses: Jimver/cuda-toolkit@v0.2.11
         with:
-          cuda-version: ${{ matrix.cuda }}
+          cuda: ${{ matrix.cuda }}
+          method: local
 
-      # Install dependencies
-      - name: Install dependencies
-        run: |
-          if [ "${{ runner.os }}" == "Linux" ]; then
-            sudo apt-get update
-            sudo apt-get install -y build-essential cmake ninja-build
-            if [ "${{ matrix.blas }}" == "ON" ]; then
-              sudo apt-get install -y libopenblas-dev
-            fi
-          elif [ "${{ runner.os }}" == "macOS" ]; then
-            brew update
-            brew install cmake ninja
-            if [ "${{ matrix.blas }}" == "ON" ]; then
-              brew install openblas
-            fi
-          elif [ "${{ runner.os }}" == "Windows" ]; then
-            choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
-            choco install ninja
-          fi
-
-      # Configure CMake
       - name: Configure CMake
         run: |
-          cmake -S libs/rwkv.cpp -B build \
-            -D RWKV_BUILD_SHARED_LIBRARY=ON \
-            -D RWKV_OPENBLAS=${{ matrix.blas }} \
-            -D RWKV_CUBLAS=${{ matrix.cublas }} \
-            -D RWKV_HIPBLAS=OFF \
-            -D RWKV_METAL=${{ matrix.metal }} \
-            -D RWKV_ACCELERATE=OFF \
-            -D CMAKE_BUILD_TYPE=Release
+          mkdir build
+          cd build
+          cmake ../libs/rwkv.cpp ${{ matrix.args }} -DCMAKE_BUILD_TYPE=Release
 
-      # Build
       - name: Build
-        run: cmake --build build --config Release --parallel
-
-      # Collect artifacts
-      - name: Collect artifacts
         run: |
-          mkdir -p artifacts/runtimes/${{ matrix.rid }}/native
-          if [ "${{ runner.os }}" == "Linux" ]; then
-            cp build/bin/librwkv.so artifacts/runtimes/${{ matrix.rid }}/native/
-          elif [ "${{ runner.os }}" == "macOS" ]; then
-            cp build/bin/librwkv.dylib artifacts/runtimes/${{ matrix.rid }}/native/
-          elif [ "${{ runner.os }}" == "Windows" ]; then
-            cp build/bin/Release/rwkv.dll artifacts/runtimes/${{ matrix.rid }}/native/
+          cd build
+          cmake --build . --config Release --parallel
+
+      - name: Prepare package structure (CPU)
+        if: matrix.type == 'cpu' && matrix.arch != 'arm64'
+        run: |
+          mkdir -p package/runtimes/${{ matrix.rid }}/native/${{ matrix.mode }}
+          if [[ "${{ runner.os }}" == "Windows" ]]; then
+            cp build/bin/Release/rwkv.dll package/runtimes/${{ matrix.rid }}/native/${{ matrix.mode }}/
+          elif [[ "${{ runner.os }}" == "Linux" ]]; then
+            cp build/librwkv.so package/runtimes/${{ matrix.rid }}/native/${{ matrix.mode }}/
+          elif [[ "${{ runner.os }}" == "macOS" ]]; then
+            cp build/librwkv.dylib package/runtimes/${{ matrix.rid }}/native/${{ matrix.mode }}/
           fi
 
-      # Upload artifacts
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.package }}-${{ matrix.rid }}
-          path: artifacts/
-          retention-days: 1
-
-  package:
-    name: Create NuGet Packages
-    needs: build
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        package: [Cpu, OpenBLAS, cuBLAS, Metal]
-    steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-          pattern: ${{ matrix.package }}-*
-
-      - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 8.0.x
-
-      - name: Create package structure
+      - name: Prepare package structure (CPU-arm64 or Other)
+        if: matrix.type != 'cpu'
         run: |
-          mkdir -p package/runtimes
-          for artifact in artifacts/${{ matrix.package }}-*; do
-            rid=${artifact#*-}
-            mkdir -p "package/runtimes/$rid/native"
-            cp -r $artifact/runtimes/$rid/native/* "package/runtimes/$rid/native/"
-          done
+          mkdir -p package/runtimes/${{ matrix.rid }}/native
+          if [[ "${{ runner.os }}" == "Windows" ]]; then
+            cp build/bin/Release/rwkv.dll package/runtimes/${{ matrix.rid }}/native/
+          elif [[ "${{ runner.os }}" == "Linux" ]]; then
+            cp build/librwkv.so package/runtimes/${{ matrix.rid }}/native/
+          elif [[ "${{ runner.os }}" == "macOS" ]]; then
+            cp build/librwkv.dylib package/runtimes/${{ matrix.rid }}/native/
+          fi
 
       - name: Create .nuspec
         run: |
-          cat > package/RWKVSharp.Native.${{ matrix.package }}.nuspec << EOF
+          cat > package/${{ matrix.package_id }}.nuspec << EOF
           <?xml version="1.0" encoding="utf-8"?>
           <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
             <metadata>
-              <id>RWKVSharp.Native.${{ matrix.package }}</id>
-              <version>1.0.0</version>
+              <id>${{ matrix.package_id }}</id>
+              <version>${{ env.NUGET_VERSION }}</version>
               <authors>xcssa</authors>
-              <description>RWKV Native Library (${{ matrix.package }})</description>
+              <description>rwkv.cpp native library (${{ matrix.package_id }})</description>
               <packageTypes>
                 <packageType name="Native" />
               </packageTypes>
             </metadata>
             <files>
-              <file src="runtimes/**" target="runtimes" />
+              <file src="../package/runtimes/**" target="runtimes" />
             </files>
           </package>
           EOF
-
+          
       - name: Pack NuGet
         run: |
           cd package
-          nuget pack RWKVSharp.Native.${{ matrix.package }}.nuspec -OutputDirectory ../out
+          nuget pack ${{ matrix.package_id }}.nuspec -OutputDirectory ../nupkg
 
-      - name: Upload package
-        uses: actions/upload-artifact@v4
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
         with:
-          name: RWKVSharp.Native.${{ matrix.package }}
-          path: out/*
-          retention-days: 1
+          name: ${{ matrix.package_id }}
+          path: nupkg/*.nupkg
+
+  create_release:
+    if: ${{ ( github.event_name == 'push' && github.ref == 'refs/heads/master' ) || github.event.inputs.create_release == 'true' }}
+    runs-on: ubuntu-latest
+    needs: [build_native]
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ env.NUGET_VERSION }}
+          name: Release v${{ env.NUGET_VERSION }}
+          body: |
+            RWKVSharp Native Packages
+          files: artifacts/**/*.nupkg
