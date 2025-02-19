@@ -151,6 +151,7 @@ jobs:
         run: |
           dotnet new classlib -n ${{ matrix.package_id }} -o ./${{ matrix.package_id }} --force
           cd ${{ matrix.package_id }}
+          rm Class1.cs
           cat > ${{ matrix.package_id }}.csproj << EOF
           <Project Sdk="Microsoft.NET.Sdk">
             <PropertyGroup>
