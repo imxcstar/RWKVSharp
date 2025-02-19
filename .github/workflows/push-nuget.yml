@@ -2,7 +2,7 @@ name: push-nuget
 
 on:
   workflow_run:
-    workflows: ["build"]
+    workflows: ["Build and Publish .NET Native Packages"]
     types:
       - completed
 
