@@ -149,7 +149,7 @@ jobs:
 
       - name: Create .nuspec
         run: |
-          dotnet new classlib -n ${{ matrix.package_id }} -o ./temp --force
+          dotnet new classlib -n ${{ matrix.package_id }} -o ./${{ matrix.package_id }} --force
           cd ${{ matrix.package_id }}
           cat > ${{ matrix.package_id }}.csproj << EOF
           <Project Sdk="Microsoft.NET.Sdk">
