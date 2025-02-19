@@ -118,11 +118,6 @@ jobs:
           cd build
           cmake --build . --config Release --parallel
 
-      - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 8.0.x
-
       - name: Prepare package structure (CPU)
         if: matrix.type == 'cpu' && matrix.arch != 'arm64'
         run: |
@@ -147,30 +142,32 @@ jobs:
             cp build/librwkv.dylib package/runtimes/${{ matrix.rid }}/native/
           fi
 
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
       - name: Create .nuspec
         run: |
-          cat > package/${{ matrix.package_id }}.nuspec << EOF
-          <?xml version="1.0" encoding="utf-8"?>
-          <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
-            <metadata>
-              <id>${{ matrix.package_id }}</id>
-              <version>${{ env.NUGET_VERSION }}</version>
-              <authors>xcssa</authors>
-              <description>rwkv.cpp native library (${{ matrix.package_id }})</description>
-              <packageTypes>
-                <packageType name="Native" />
-              </packageTypes>
-            </metadata>
-            <files>
-              <file src="../package/runtimes/**" target="runtimes" />
-            </files>
-          </package>
+          cat > package/${{ matrix.package_id }}.csproj << EOF
+          <Project Sdk="Microsoft.NET.Sdk">
+            <PropertyGroup>
+              <TargetFramework>netstandard2.0</TargetFramework>
+              <PackageId>${{ matrix.package_id }}</PackageId>
+              <Version>${{ env.NUGET_VERSION }}</Version>
+              <Authors>xcssa</Authors>
+              <PackageTags>rwkv,rwkv.cpp,native</PackageTags>
+              <IncludeBuildOutput>false</IncludeBuildOutput>
+            </PropertyGroup>
+            <ItemGroup>
+              <None Include="../package/runtimes/**" 
+                    Pack="true" 
+                    PackagePath="runtimes/" />
+            </ItemGroup>
+          </Project>
           EOF
-          
-      - name: Pack NuGet
-        run: |
-          cd package
-          dotnet pack ${{ matrix.package_id }}.nuspec -o ../nupkg
+          dotnet pack -c Release -o ../nupkg
+          cd ..
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -179,7 +176,7 @@ jobs:
           path: nupkg/*.nupkg
 
   create_release:
-    if: ${{ ( github.event_name == 'push' && github.ref == 'refs/heads/master' ) || github.event.inputs.create_release == 'true' }}
+    if: ${{ ( github.event_name == 'push' && github.ref == 'refs/heads/dev' ) || github.event.inputs.create_release == 'true' }}
     runs-on: ubuntu-latest
     needs: [build_native]
     permissions:
