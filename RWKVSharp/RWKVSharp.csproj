@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>net8.0</TargetFrameworks>
+		<RootNamespace>RWKVSharp</RootNamespace>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<Platforms>AnyCPU;x64</Platforms>
+		<AssemblyName>RWKVSharp</AssemblyName>
+		<RootNamespace>RWKVSharp</RootNamespace>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Authors>xcssa</Authors>
+		<Company>SSA</Company>
+		<Description>
+			rwkv.cpp ggml wrapper for rwkv llm model (cpu)
+			Supports Windows/Linux/macOS. Prebuilt binaries included for Windows.
+			Other systems need to compile from https://github.com/RWKV/rwkv.cpp
+		</Description>
+		<PackageProjectUrl>https://github.com/imxcstar/RWKVSharp</PackageProjectUrl>
+		<PackageId>$(AssemblyName)</PackageId>
+		<Version>0.0.1</Version>
+		<RuntimeIdentifiers>win-x64;linux-x64;osx-x64;osx-arm64</RuntimeIdentifiers>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\RWKVSharp.Core\RWKVSharp.Core.csproj" />
+	</ItemGroup>
+</Project>

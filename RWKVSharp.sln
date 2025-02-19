@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RWKVSharp.GGML", "RWKVSharp.GGML\RWKVSharp.GGML.csproj", "{00C40717-2529-4369-A14E-B6C64FCE20F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RWKVSharp", "RWKVSharp\RWKVSharp.csproj", "{00C40717-2529-4369-A14E-B6C64FCE20F1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RWKVSharp.Core", "RWKVSharp.Core\RWKVSharp.Core.csproj", "{24137E7C-145C-44DF-80AA-937F422A039E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RWKVSharp.GGML.Test", "RWKVSharp.GGML.Test\RWKVSharp.GGML.Test.csproj", "{B32FD283-C22E-48E6-A7B9-6354B80338E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RWKVSharp.Test", "RWKVSharp.Test\RWKVSharp.Test.csproj", "{B32FD283-C22E-48E6-A7B9-6354B80338E7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{EB6B49B9-B046-40C0-8814-4FE40DA5B410}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RWKVSharp.GGML.Quantize", "RWKVSharp.GGML.Quantize\RWKVSharp.GGML.Quantize.csproj", "{FE61227E-C602-4959-AE1A-1B7EDC57D56D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RWKVSharp.Quantize", "RWKVSharp.Quantize\RWKVSharp.Quantize.csproj", "{FE61227E-C602-4959-AE1A-1B7EDC57D56D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tool", "Tool", "{F65D5B29-B42A-4697-803B-AC6251DAD949}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RWKVSharp.GGML.Convert", "RWKVSharp.GGML.Convert\RWKVSharp.GGML.Convert.csproj", "{50127148-DEE3-48F8-815C-47615EEBDF8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RWKVSharp.Convert", "RWKVSharp.Convert\RWKVSharp.Convert.csproj", "{50127148-DEE3-48F8-815C-47615EEBDF8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

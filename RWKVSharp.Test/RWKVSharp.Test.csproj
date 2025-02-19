@@ -10,7 +10,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\RWKVSharp.GGML\RWKVSharp.GGML.csproj" />
+		<ProjectReference Include="..\RWKVSharp\RWKVSharp.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
