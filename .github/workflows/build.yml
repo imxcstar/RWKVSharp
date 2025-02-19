@@ -8,7 +8,7 @@ on:
         required: true
         type: boolean
   push:
-    branches: [dev]
+    branches: [main]
 
 env:
   NUGET_VERSION: 1.0.${{ github.run_number }}
@@ -301,11 +301,11 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: RWKVSharp.Core.${{ env.NUGET_VERSION }}
+          name: RWKVSharp
           path: nupkg/*.nupkg
 
   create_release:
-    if: ${{ ( github.event_name == 'push' && github.ref == 'refs/heads/dev' ) || github.event.inputs.create_release == 'true' }}
+    if: ${{ ( github.event_name == 'push' && github.ref == 'refs/heads/main' ) || github.event.inputs.create_release == 'true' }}
     runs-on: ubuntu-latest
     needs:
       - build_native

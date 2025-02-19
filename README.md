@@ -1,41 +1,53 @@
-## Support RWKV4 Raven/World RWKV5 / RWKV6 / RWKV7 World/Finch 1B5-14B (ggml) (CPU/GPU)
-
-### Use
-Development Environment: Windows, Visual Studio 2022
-
+### English | [中文](README.ZH.md)
+## Based on [rwkv.cpp](https://github.com/RWKV/rwkv.cpp), supports running RWKV4, RWKV5, RWKV6, RWKV7 World/Raven/Finch 1B5-14B (ggml) (CPU/GPU)
+### Installation
+Install from [nuget.org](https://www.nuget.org/packages?q=RWKVSharp)
 ```
-git clone https://github.com/imxcstar/RWKVSharp.git
+PM> Install-Package RWKVSharp
+```
+If you are running on Windows CPU, you also need to install the following:
+```
+PM> Install-Package RWKVSharp.Native.Cpu.avx2.win-x64
+```
+For native libraries on other systems, you can search at [nuget.org](https://www.nuget.org/packages?q=RWKVSharp)
 
-cd RWKVSharp
-
-git submodule update --progress --init --remote
-
-git submodule update --progress --init --recursive
+### How to use RWKVSharp
+```csharp
+using RWKVSharp.Core;
+using RWKVSharp;
+var rf = new RunnerFactory();
+rf.RegisterRWKVGGMLModel("RWKV-x070-World-0.1B-v2.8-20241210-ctx4096-FP16.bin", "rwkv_vocab_v20230424.txt");
+// RWKV-x070-World-0.1B-v2.8-20241210-ctx4096-FP16.bin conversion instructions are detailed below.
+// rwkv_vocab_v20230424.txt can be downloaded from https://github.com/imxcstar/RWKVSharp/tree/main/RWKVSharp.Test/Model
+var r = rf.Builder();
+while (true)
+{
+    Console.Write(">");
+    var value = Console.ReadLine();
+    if (string.IsNullOrEmpty(value))
+        continue;
+    r.Generate(value.Replace("\\r\\n", "\r\n").Replace("\\r", "\r").Replace("\\n", "\n"), Console.Write);
+    Console.WriteLine();
+}
 ```
 
-Download model from [Hugging Face](https://huggingface.co/BlinkDL)
+### Model conversion method
+1. First, download the `.pth` model you wish to use from https://huggingface.co/RWKV
+2. Then, download the `RWKVSharp.Convert.zip` conversion tool from [Releases](https://github.com/imxcstar/RWKVSharp/releases) (currently only supports Windows)
+3. Use the conversion tool to convert the model.
+![4.png](/Preview/4.png)
+4. After conversion, you'll obtain a `.bin` model file that can be used with RWKVSharp.
+![5.png](/Preview/5.png)
 
-Open RWKVSharp.sln
-
-Compile the RWKVSharp.GGML.Convert project and then use this project to convert the downloaded model.
-
-Compile the RWKVSharp.GGML.Test project, and then put the converted model model into the Model directory in the project.
-
-[Download rwkv native libraries for other systems](https://github.com/RWKV/rwkv.cpp/releases)
-
-## Model placement location
-
-![3.png](/Preview/3.png)
+### Model Quantization Tool
+You can download `RWKVSharp.Quantize.zip` from [Releases](https://github.com/imxcstar/RWKVSharp/releases) (currently only supports Windows).
 
 ## Preview
-
 ![1.png](/Preview/1.png)
-
 ![2.png](/Preview/2.png)
 
-## Reference Links
-
-* **RWKV Hugging Face repo**: https://huggingface.co/RWKV
+## Links
+* **RWKV Hugging Face repository**: https://huggingface.co/RWKV
 * **rwkv.cpp**: https://github.com/RWKV/rwkv.cpp
 * **RWKV**: https://github.com/BlinkDL/RWKV-LM
 * **ChatRWKV**: https://github.com/BlinkDL/ChatRWKV
