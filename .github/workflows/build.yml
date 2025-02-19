@@ -67,29 +67,6 @@ jobs:
             mode: avx512
             type: cpu
 
-          - package_id: RWKVSharp.Native.Cpu.avx.osx-x64
-            os: macOS-latest
-            arch: x64
-            args: -DRWKV_AVX2=OFF
-            rid: osx-x64
-            mode: avx
-            type: cpu
-
-          - package_id: RWKVSharp.Native.Cpu.avx2.osx-x64
-            os: macOS-latest
-            arch: x64
-            rid: osx-x64
-            mode: avx2
-            type: cpu
-
-          - package_id: RWKVSharp.Native.Cpu.avx512.osx-x64
-            os: macOS-latest
-            arch: x64
-            args: -DRWKV_AVX512=ON
-            rid: osx-x64
-            mode: avx512
-            type: cpu
-
           - package_id: RWKVSharp.Native.Cpu.linux-arm64
             os: ubuntu-latest
             arch: arm64
@@ -140,11 +117,15 @@ jobs:
         run: |
           cd build
           cmake --build . --config Release --parallel
-          
+
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
+
+      - name: Setup NuGet
+        uses: nuget/setup-nuget@v1
+        continue-on-error: false
 
       - name: Prepare package structure (CPU)
         if: matrix.type == 'cpu' && matrix.arch != 'arm64'
