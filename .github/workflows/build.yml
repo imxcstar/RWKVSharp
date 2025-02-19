@@ -151,7 +151,7 @@ jobs:
         run: |
           cat > package/${{ matrix.package_id }}.nuspec << EOF
           <?xml version="1.0" encoding="utf-8"?>
-          <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+          <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
             <metadata>
               <id>${{ matrix.package_id }}</id>
               <version>${{ env.NUGET_VERSION }}</version>
