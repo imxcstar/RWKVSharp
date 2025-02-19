@@ -74,12 +74,12 @@ jobs:
             type: cpu
 
           # cuBLAS Targets
-          - package_id: RWKVSharp.Native.cuBLAS.cuda11.win-x64
+          - package_id: RWKVSharp.Native.cuBLAS.cuda11.1.win-x64
             os: windows-2019
             arch: x64
             args: -DRWKV_CUBLAS=ON
             rid: win-x64
-            cuda: 11.0.0
+            cuda: 11.1.0
 
           - package_id: RWKVSharp.Native.cuBLAS.cuda12.8.win-x64
             os: windows-2019
