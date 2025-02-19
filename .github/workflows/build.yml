@@ -118,36 +118,74 @@ jobs:
           cd build
           cmake --build . --config Release --parallel
 
-      - name: Prepare package structure (CPU)
-        if: matrix.type == 'cpu' && matrix.arch != 'arm64'
-        run: |
-          mkdir -p package/runtimes/${{ matrix.rid }}/native/${{ matrix.mode }}
-          if [[ "${{ runner.os }}" == "Windows" ]]; then
-            cp build/bin/Release/rwkv.dll package/runtimes/${{ matrix.rid }}/native/${{ matrix.mode }}/
-          elif [[ "${{ runner.os }}" == "Linux" ]]; then
-            cp build/librwkv.so package/runtimes/${{ matrix.rid }}/native/${{ matrix.mode }}/
-          elif [[ "${{ runner.os }}" == "macOS" ]]; then
-            cp build/librwkv.dylib package/runtimes/${{ matrix.rid }}/native/${{ matrix.mode }}/
-          fi
-
-      - name: Prepare package structure (CPU-arm64 or Other)
-        if: matrix.type != 'cpu' || matrix.arch == 'arm64'
-        run: |
-          mkdir -p package/runtimes/${{ matrix.rid }}/native
-          if [[ "${{ runner.os }}" == "Windows" ]]; then
-            cp build/bin/Release/rwkv.dll package/runtimes/${{ matrix.rid }}/native/
-          elif [[ "${{ runner.os }}" == "Linux" ]]; then
-            cp build/librwkv.so package/runtimes/${{ matrix.rid }}/native/
-          elif [[ "${{ runner.os }}" == "macOS" ]]; then
-            cp build/librwkv.dylib package/runtimes/${{ matrix.rid }}/native/
-          fi
-
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
 
-      - name: Create .nuspec
+      - name: Prepare package structure (CPU) (Windows)
+        if: matrix.type == 'cpu' && matrix.arch != 'arm64' && runner.os == 'Windows'
+        run: |
+          $modeDir = "package/runtimes/$($env:matrix_rid)/native/$($env:matrix_mode)"
+          New-Item -Path $modeDir -ItemType Directory -Force
+          Copy-Item build/bin/Release/rwkv.dll -Destination $modeDir
+
+      - name: Prepare package structure (CPU-arm64 or Other) (Windows)
+        if: (matrix.type != 'cpu' || matrix.arch == 'arm64') && runner.os == 'Windows'
+        run: |
+          $nativeDir = "package/runtimes/$($env:matrix_rid)/native"
+          New-Item -Path $nativeDir -ItemType Directory -Force
+          Copy-Item build/bin/Release/rwkv.dll -Destination $nativeDir
+          
+      - name: Create .nupkg (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          dotnet new classlib -n ${{ matrix.package_id }} -o ./${{ matrix.package_id }} --force
+          Set-Location -Path "./${{ matrix.package_id }}"
+          Remove-Item "Class1.cs" -Force
+          $projectFileContent = @"
+          <Project Sdk="Microsoft.NET.Sdk">
+            <PropertyGroup>
+              <TargetFramework>netstandard2.0</TargetFramework>
+              <PackageId>${{ matrix.package_id }}</PackageId>
+              <Version>${{ env.NUGET_VERSION }}</Version>
+              <Authors>xcssa</Authors>
+              <PackageTags>rwkv,rwkv.cpp,native</PackageTags>
+              <IncludeBuildOutput>false</IncludeBuildOutput>
+            </PropertyGroup>
+            <ItemGroup>
+              <None Include="../package/runtimes/**" 
+                    Pack="true" 
+                    PackagePath="runtimes/" />
+            </ItemGroup>
+          </Project>
+          "@
+          Set-Content -Path "${{ matrix.package_id }}.csproj" -Value $projectFileContent
+          dotnet pack -c Release -o ../nupkg
+          Set-Location -Path ..
+
+      - name: Prepare package structure (CPU) (No Windows)
+        if: matrix.type == 'cpu' && matrix.arch != 'arm64' && runner.os != 'Windows'
+        run: |
+          mkdir -p package/runtimes/${{ matrix.rid }}/native/${{ matrix.mode }}
+          if [[ "${{ runner.os }}" == "Linux" ]]; then
+            cp build/librwkv.so package/runtimes/${{ matrix.rid }}/native/${{ matrix.mode }}/
+          elif [[ "${{ runner.os }}" == "macOS" ]]; then
+            cp build/librwkv.dylib package/runtimes/${{ matrix.rid }}/native/${{ matrix.mode }}/
+          fi
+
+      - name: Prepare package structure (CPU-arm64 or Other) (No Windows)
+        if: (matrix.type != 'cpu' || matrix.arch == 'arm64') && runner.os != 'Windows'
+        run: |
+          mkdir -p package/runtimes/${{ matrix.rid }}/native
+          if [[ "${{ runner.os }}" == "Linux" ]]; then
+            cp build/librwkv.so package/runtimes/${{ matrix.rid }}/native/
+          elif [[ "${{ runner.os }}" == "macOS" ]]; then
+            cp build/librwkv.dylib package/runtimes/${{ matrix.rid }}/native/
+          fi
+
+      - name: Create .nupkg (No Windows)
+        if: runner.os != 'Windows'
         run: |
           dotnet new classlib -n ${{ matrix.package_id }} -o ./${{ matrix.package_id }} --force
           cd ${{ matrix.package_id }}
