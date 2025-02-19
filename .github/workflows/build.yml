@@ -126,17 +126,17 @@ jobs:
       - name: Prepare package structure (CPU) (Windows)
         if: matrix.type == 'cpu' && matrix.arch != 'arm64' && runner.os == 'Windows'
         run: |
-          $modeDir = "package/runtimes/$($env:matrix_rid)/native/$($env:matrix_mode)"
+          $modeDir = "package/runtimes/${{ matrix.rid }}/native/${{ matrix.mode }}"
           New-Item -Path $modeDir -ItemType Directory -Force
           Copy-Item build/bin/Release/rwkv.dll -Destination $modeDir
 
       - name: Prepare package structure (CPU-arm64 or Other) (Windows)
         if: (matrix.type != 'cpu' || matrix.arch == 'arm64') && runner.os == 'Windows'
         run: |
-          $nativeDir = "package/runtimes/$($env:matrix_rid)/native"
+          $nativeDir = "package/runtimes/${{ matrix.rid }}/native"
           New-Item -Path $nativeDir -ItemType Directory -Force
           Copy-Item build/bin/Release/rwkv.dll -Destination $nativeDir
-          
+
       - name: Create .nupkg (Windows)
         if: runner.os == 'Windows'
         run: |
@@ -225,7 +225,7 @@ jobs:
 
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           path: artifacts
 
