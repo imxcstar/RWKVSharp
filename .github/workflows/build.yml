@@ -149,7 +149,9 @@ jobs:
 
       - name: Create .nuspec
         run: |
-          cat > package/${{ matrix.package_id }}.csproj << EOF
+          dotnet new classlib -n ${{ matrix.package_id }} -o ./temp --force
+          cd ${{ matrix.package_id }}
+          cat > ${{ matrix.package_id }}.csproj << EOF
           <Project Sdk="Microsoft.NET.Sdk">
             <PropertyGroup>
               <TargetFramework>netstandard2.0</TargetFramework>
