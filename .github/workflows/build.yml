@@ -191,7 +191,7 @@ jobs:
           nuget pack ${{ matrix.package_id }}.nuspec -OutputDirectory ../nupkg
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.package_id }}
           path: nupkg/*.nupkg
