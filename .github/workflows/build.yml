@@ -328,6 +328,4 @@ jobs:
           name: Release v${{ env.NUGET_VERSION }}
           body: |
             RWKVSharp Native Packages
-          files: 
-            - artifacts/**/*.nupkg
-            - artifacts/**/*.zip
+          files: artifacts/**/*
