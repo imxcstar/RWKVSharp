@@ -33,6 +33,9 @@ jobs:
           else
             echo "changed=true" >> $GITHUB_OUTPUT
           fi
+      - name: Debug output
+        run: echo "${{ steps.check.outputs.changed }}"
+        
   build_native:
     needs: submodule-check
     if: ${{ needs.submodule-check.outputs.updated == 'true' }}
