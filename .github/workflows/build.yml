@@ -293,10 +293,10 @@ jobs:
 
       - name: Build
         run: |
-          dotnet publish -c Release --sc .\RWKVSharp.Core\RWKVSharp.Core.csproj
-          dotnet publish -c Release --sc .\RWKVSharp\RWKVSharp.csproj
-          dotnet pack -c Release -o nupkg .\RWKVSharp.Core\RWKVSharp.Core.csproj
-          dotnet pack -c Release -o nupkg .\RWKVSharp\RWKVSharp.csproj
+          dotnet publish -c Release --sc ./RWKVSharp.Core/RWKVSharp.Core.csproj
+          dotnet publish -c Release --sc ./RWKVSharp/RWKVSharp.csproj
+          dotnet pack -c Release -o nupkg ./RWKVSharp.Core/RWKVSharp.Core.csproj
+          dotnet pack -c Release -o nupkg ./RWKVSharp/RWKVSharp.csproj
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
