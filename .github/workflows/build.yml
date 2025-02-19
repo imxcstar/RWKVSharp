@@ -123,10 +123,6 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: Setup NuGet
-        uses: nuget/setup-nuget@v1
-        continue-on-error: false
-
       - name: Prepare package structure (CPU)
         if: matrix.type == 'cpu' && matrix.arch != 'arm64'
         run: |
@@ -174,7 +170,7 @@ jobs:
       - name: Pack NuGet
         run: |
           cd package
-          nuget pack ${{ matrix.package_id }}.nuspec -OutputDirectory ../nupkg
+          dotnet pack ${{ matrix.package_id }}.nuspec -o ../nupkg
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
