@@ -140,6 +140,11 @@ jobs:
         run: |
           cd build
           cmake --build . --config Release --parallel
+          
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
 
       - name: Prepare package structure (CPU)
         if: matrix.type == 'cpu' && matrix.arch != 'arm64'
