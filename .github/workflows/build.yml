@@ -15,7 +15,28 @@ env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
 
 jobs:
+  check-submodules:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.submodule_check.outputs.changed }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect submodule changes
+        id: submodule_check
+        run: |
+          BEFORE_SHA="${{ github.event.before || '4b825dc642cb6eb9a060e54bf8d69288fbee4904' }}"
+          if git diff $BEFORE_SHA ${{ github.sha }} --submodule=log --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
   build_native:
+    needs: check-submodules
+    if: ${{ needs.check-submodules.outputs.changed == 'true' }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
