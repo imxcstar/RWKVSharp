@@ -12,7 +12,8 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Authors>xcssa</Authors>
 		<Company>SSA</Company>
-		<Description>Implementation of a Custom LLM Model Abstract Factory Pattern</Description>
+		<Description>implementation of a custom llm model abstract factory pattern</Description>
+		<PackageTags>rwkv,rwkv.cpp</PackageTags>
 		<PackageProjectUrl>https://github.com/imxcstar/RWKVSharp</PackageProjectUrl>
 		<PackageId>$(AssemblyName)</PackageId>
 		<Version>$(NUGET_VERSION)</Version>

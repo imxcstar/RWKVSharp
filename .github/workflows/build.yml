@@ -15,8 +15,6 @@ on:
         description: 'Build Native Library'
         required: true
         type: boolean
-  push:
-    branches: [main]
 
 env:
   NUGET_VERSION: 1.0.${{ github.run_number }}
@@ -191,6 +189,7 @@ jobs:
               <Version>${{ env.NUGET_VERSION }}</Version>
               <Authors>xcssa</Authors>
               <PackageTags>rwkv,rwkv.cpp,native</PackageTags>
+		          <Description>rwkv.cpp native library</Description>
               <IncludeBuildOutput>false</IncludeBuildOutput>
             </PropertyGroup>
             <ItemGroup>
@@ -238,6 +237,7 @@ jobs:
               <Version>${{ env.NUGET_VERSION }}</Version>
               <Authors>xcssa</Authors>
               <PackageTags>rwkv,rwkv.cpp,native</PackageTags>
+		          <Description>rwkv.cpp native library</Description>
               <IncludeBuildOutput>false</IncludeBuildOutput>
             </PropertyGroup>
             <ItemGroup>
@@ -338,7 +338,7 @@ jobs:
           path: nupkg/*.nupkg
 
   create_native_release:
-    if: ${{ ( github.event_name == 'push' && github.ref == 'refs/heads/main' ) || github.event.inputs.create_native_release == 'true' }}
+    if: ${{ github.event.inputs.create_native_release == 'true' }}
     runs-on: ubuntu-latest
     needs:
       - build_native
@@ -369,7 +369,7 @@ jobs:
         run: dotnet nuget push artifacts/**/RWKVSharp.Native.*.nupkg --source https://www.nuget.org -k ${{ secrets.RWKVSHARP_NUGET_KEY }} --skip-duplicate
 
   create_release:
-    if: ${{ ( github.event_name == 'push' && github.ref == 'refs/heads/main' ) || github.event.inputs.create_release == 'true' }}
+    if: ${{ github.event.inputs.create_release == 'true' }}
     runs-on: ubuntu-latest
     needs:
       - build_convert_tool

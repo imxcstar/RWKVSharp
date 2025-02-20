@@ -13,11 +13,8 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Authors>xcssa</Authors>
 		<Company>SSA</Company>
-		<Description>
-			rwkv.cpp ggml wrapper for rwkv llm model (cpu)
-			Supports Windows/Linux/macOS. Prebuilt binaries included for Windows.
-			Other systems need to compile from https://github.com/RWKV/rwkv.cpp
-		</Description>
+		<Description>rwkv.cpp wrapper for rwkv llm model. supports windows/linux/macOS.</Description>
+		<PackageTags>rwkv,rwkv.cpp</PackageTags>
 		<PackageProjectUrl>https://github.com/imxcstar/RWKVSharp</PackageProjectUrl>
 		<PackageId>$(AssemblyName)</PackageId>
 		<Version>$(NUGET_VERSION)</Version>
