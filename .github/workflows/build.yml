@@ -353,12 +353,11 @@ jobs:
           body: |
             RWKVSharp Native Packages
           files: artifacts/**/*
-
-      - name: Setup NuGet
-        uses: nuget/setup-nuget@v1
+          
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
         with:
-          nuget-api-key: $NUGET_API_TOKEN
-          nuget-version: 'latest'
+          dotnet-version: 8.0.x
 
       - name: Push RWKVSharp packages to nuget.org
         run: dotnet nuget push artifacts/**/*.nupkg --source https://www.nuget.org -k ${{ secrets.RWKVSHARP_NUGET_KEY }} --skip-duplicate
