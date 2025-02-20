@@ -7,6 +7,10 @@ on:
         description: 'Create new release'
         required: true
         type: boolean
+      build_native_library:
+        description: 'Build Native Library'
+        required: true
+        type: boolean
   push:
     branches: [main]
 
@@ -29,7 +33,9 @@ jobs:
       - name: Check submodules
         id: check
         run: |
-          if git diff HEAD^ HEAD --submodule=log --quiet; then
+          current_hash=$(git ls-tree HEAD "libs/rwkv.cpp" 2>/dev/null | awk '{print $3}')
+          previous_hash=$(git ls-tree HEAD^ "libs/rwkv.cpp" 2>/dev/null | awk '{print $3}')
+          if [ "$current_hash" = "$previous_hash" ]; then
             echo "changed=false" >> $GITHUB_OUTPUT
           else
             echo "changed=true" >> $GITHUB_OUTPUT
@@ -39,7 +45,7 @@ jobs:
         
   build_native:
     needs: submodule-check
-    if: ${{ needs.submodule-check.outputs.updated == 'true' }}
+    if: ${{ needs.submodule-check.outputs.updated == 'true' || github.event.inputs.build_native_library == 'true' }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -353,7 +359,7 @@ jobs:
           body: |
             RWKVSharp Native Packages
           files: artifacts/**/*
-          
+
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
