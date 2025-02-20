@@ -367,7 +367,7 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Push RWKVSharp packages to nuget.org
-        run: dotnet nuget push artifacts/**/*.nupkg --source https://www.nuget.org -k $NUGET_API_TOKEN --skip-duplicate
+        run: dotnet nuget push artifacts/**/*.nupkg --source https://www.nuget.org -k ${{ NUGET_API_TOKEN }} --skip-duplicate
 
   create_release:
     if: ${{ ( github.event_name == 'push' && github.ref == 'refs/heads/main' ) || github.event.inputs.create_release == 'true' }}
@@ -400,4 +400,4 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Push RWKVSharp packages to nuget.org
-        run: dotnet nuget push artifacts/**/*.nupkg --source https://www.nuget.org -k $NUGET_API_TOKEN --skip-duplicate
+        run: dotnet nuget push artifacts/**/*.nupkg --source https://www.nuget.org -k ${{ NUGET_API_TOKEN }} --skip-duplicate
