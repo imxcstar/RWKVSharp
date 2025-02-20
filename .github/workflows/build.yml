@@ -188,8 +188,8 @@ jobs:
               <PackageId>${{ matrix.package_id }}</PackageId>
               <Version>${{ env.NUGET_VERSION }}</Version>
               <Authors>xcssa</Authors>
+              <Description>rwkv.cpp native library</Description>
               <PackageTags>rwkv,rwkv.cpp,native</PackageTags>
-		          <Description>rwkv.cpp native library</Description>
               <IncludeBuildOutput>false</IncludeBuildOutput>
             </PropertyGroup>
             <ItemGroup>
@@ -237,7 +237,7 @@ jobs:
               <Version>${{ env.NUGET_VERSION }}</Version>
               <Authors>xcssa</Authors>
               <PackageTags>rwkv,rwkv.cpp,native</PackageTags>
-		          <Description>rwkv.cpp native library</Description>
+              <Description>rwkv.cpp native library</Description>
               <IncludeBuildOutput>false</IncludeBuildOutput>
             </PropertyGroup>
             <ItemGroup>
