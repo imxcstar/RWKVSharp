@@ -21,7 +21,6 @@ on:
 env:
   NUGET_VERSION: 1.0.${{ github.run_number }}
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-  NUGET_API_TOKEN: ${{ secrets.RWKVSHARP_NUGET_KEY }}
 
 jobs:
   submodule-check:
@@ -367,7 +366,7 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Push RWKVSharp packages to nuget.org
-        run: dotnet nuget push artifacts/**/*.nupkg --source https://www.nuget.org -k ${{ env.NUGET_API_TOKEN }} --skip-duplicate
+        run: dotnet nuget push artifacts/**/*.nupkg --source https://www.nuget.org -k ${{ secrets.RWKVSHARP_NUGET_KEY }} --skip-duplicate
 
   create_release:
     if: ${{ ( github.event_name == 'push' && github.ref == 'refs/heads/main' ) || github.event.inputs.create_release == 'true' }}
@@ -400,4 +399,4 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Push RWKVSharp packages to nuget.org
-        run: dotnet nuget push artifacts/**/*.nupkg --source https://www.nuget.org -k ${{ env.NUGET_API_TOKEN }} --skip-duplicate
+        run: dotnet nuget push artifacts/**/*.nupkg --source https://www.nuget.org -k ${{ secrets.RWKVSHARP_NUGET_KEY }} --skip-duplicate
