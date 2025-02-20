@@ -7,12 +7,12 @@ on:
         description: 'Create release'
         required: true
         type: boolean
-      create_native_release:
-        description: 'Create Native release'
+      create_tools_release:
+        description: 'Create Tools release'
         required: true
         type: boolean
-      build_native_library:
-        description: 'Build Native Library'
+      create_native_release:
+        description: 'Create Native release'
         required: true
         type: boolean
 
@@ -46,7 +46,7 @@ jobs:
         
   build_native:
     needs: submodule-check
-    if: ${{ needs.submodule-check.outputs.updated == 'true' || github.event.inputs.build_native_library == 'true' }}
+    if: ${{ needs.submodule-check.outputs.updated == 'true' || github.event.inputs.create_native_release == 'true' }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -357,7 +357,38 @@ jobs:
           tag_name: v${{ env.NUGET_VERSION }}
           name: Release v${{ env.NUGET_VERSION }}
           body: |
-            RWKVSharp Native Packages
+            RWKVSharp Native Library Packages
+          files: artifacts/**/*
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Push RWKVSharp native library packages to nuget.org
+        run: dotnet nuget push artifacts/**/RWKVSharp.Native.*.nupkg --source https://www.nuget.org -k ${{ secrets.RWKVSHARP_NUGET_KEY }} --skip-duplicate
+
+  create_release:
+    if: ${{ github.event.inputs.create_release == 'true' }}
+    runs-on: ubuntu-latest
+    needs:
+      - build_rwkvsharp
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ env.NUGET_VERSION }}
+          name: Release v${{ env.NUGET_VERSION }}
+          body: |
+            RWKVSharp Packages
           files: artifacts/**/*
 
       - name: Setup .NET SDK
@@ -366,15 +397,14 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Push RWKVSharp packages to nuget.org
-        run: dotnet nuget push artifacts/**/RWKVSharp.Native.*.nupkg --source https://www.nuget.org -k ${{ secrets.RWKVSHARP_NUGET_KEY }} --skip-duplicate
+        run: dotnet nuget push artifacts/**/*.nupkg --source https://www.nuget.org -k ${{ secrets.RWKVSHARP_NUGET_KEY }} --skip-duplicate
 
-  create_release:
-    if: ${{ github.event.inputs.create_release == 'true' }}
+  create_tools_release:
+    if: ${{ github.event.inputs.create_tools_release == 'true' }}
     runs-on: ubuntu-latest
     needs:
       - build_convert_tool
       - build_quantize_tool
-      - build_rwkvsharp
     permissions:
       contents: write
 
@@ -392,11 +422,3 @@ jobs:
           body: |
             RWKVSharp Native Packages
           files: artifacts/**/*
-
-      - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 8.0.x
-
-      - name: Push RWKVSharp packages to nuget.org
-        run: dotnet nuget push artifacts/**/*.nupkg --source https://www.nuget.org -k ${{ secrets.RWKVSHARP_NUGET_KEY }} --skip-duplicate
