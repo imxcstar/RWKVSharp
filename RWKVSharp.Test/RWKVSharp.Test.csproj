@@ -10,6 +10,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="RWKVSharp.Native.Cpu.avx2.win-x64" Version="1.0.38" />
+	  <PackageReference Include="RWKVSharp.Native.Metal.osx-arm64" Version="1.0.38" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\RWKVSharp\RWKVSharp.csproj" />
 	</ItemGroup>
 

@@ -15,6 +15,7 @@ namespace RWKVSharp
                 return;
 
             _isLoadLibrary = true;
+            var library_name = RwkvCppNative.LIBRARY_NAME;
             var library_ex = "";
             var os = "";
 
@@ -23,7 +24,27 @@ namespace RWKVSharp
                 os = "win";
                 library_ex = ".dll";
             }
+            else
+            {
+                library_name = $"lib{library_name}";
+            }
 
+            //优先加载目录下的
+            var libraryPath = $"{library_name}{library_ex}";
+            if (File.Exists(libraryPath))
+            {
+                NativeLibrary.Load(libraryPath);
+                return;
+            }
+
+            libraryPath = $"{RwkvCppNative.LIBRARY_NAME}{library_ex}";
+            if (File.Exists(libraryPath))
+            {
+                NativeLibrary.Load(libraryPath);
+                return;
+            }
+
+            //再根据系统和CPU架构加载
             var arch = RuntimeInformation.ProcessArchitecture switch
             {
                 Architecture.X64 => "x64",
@@ -55,9 +76,18 @@ namespace RWKVSharp
 
             if (!string.IsNullOrWhiteSpace(os) && !string.IsNullOrWhiteSpace(arch) && !string.IsNullOrWhiteSpace(avx))
             {
-                var libraryPath = Path.Combine("runtimes", $"{os}-{arch}", "native", avx, $"{RwkvCppNative.LIBRARY_NAME}{library_ex}");
+                libraryPath = Path.Combine("runtimes", $"{os}-{arch}", "native", avx, $"{library_name}{library_ex}");
                 if (File.Exists(libraryPath))
+                {
                     NativeLibrary.Load(libraryPath);
+                    return;
+                }
+                libraryPath = Path.Combine("runtimes", $"{os}-{arch}", "native", avx, $"{RwkvCppNative.LIBRARY_NAME}{library_ex}");
+                if (File.Exists(libraryPath))
+                {
+                    NativeLibrary.Load(libraryPath);
+                    return;
+                }
             }
         }
 
